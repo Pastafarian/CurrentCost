@@ -1,0 +1,128 @@
+{
+	"folders": [
+		{
+			"path": "../"
+		}
+	],
+	"settings": {
+    "omnisharp.loggingLevel": "warning",
+    "omnisharp.enableEditorConfigSupport": true,
+		"omnisharp.enableRoslynAnalyzers": true,
+    "files.associations": {
+      "*/DevOps/.yml": "azure-pipelines"
+    },
+    "files.exclude": {
+      "**/docs/_site/": true,
+      "**/docs/.jekyll-cache/": true,
+			"**/bin/": true,
+      "**/obj/": true,
+      "**/.cr/": true,
+      "**/.vs/": true,
+      "**/node_modules/": true,
+      "**/*.csproj.user": true,
+      "**/*.docs.xml": true,
+      "**/lcov.info": true,
+      "**/AdminAssistant.db": true,
+      "**/AdminAssistant.mdf": true,
+      "**/AdminAssistant.ldf": true,
+    },
+    "cSpell.language": "en-GB",
+    "cSpell.enableCompoundWords": true,
+    "cSpell.ignorePaths": [
+      "**/package.json",
+      "**/package-lock.json",
+      "**/launchSettings.json",
+      "**/node_modules/**",
+      "**/vscode-extension/**",
+      "**/.git/objects/**",
+      ".vscode",
+      "**/AdminAssistant.code-workspace"
+    ],
+    "cSpell.words": [
+      "Admin",
+      "Apps",
+      "Ardalis",
+      "blazor",
+      "Bootswatch",
+      "Emoji",
+      "geering",
+      "markdownlint",
+      "MediatR",
+      "nuget",
+      "pwsh",
+      "setvariable",
+      "Setup",
+      "Syncfusion",
+      "titlebar",
+      "vsts",
+      "Xunit",
+      "webassembly"
+    ],
+    "todo-tree.filtering.excludeGlobs": [
+      "**/vendor/**",
+      "**/node_modules/**",
+      "**/dist/**",
+      "**/bower_components/**",
+      "**/build/**",
+      "**/.vscode/**",
+      "**/.github/**",
+      "**/_output/**",
+      "**/*.min.*",
+      "**/*.map",
+      "**/docs/js/*mermaid*"
+    ],
+    "editor.bracketPairColorization.enabled": true,
+    "editor.guides.bracketPairs":"active",
+    "editor.fontFamily": "'Fira Code','FiraCode NF','Consolas','monospace'",
+    "editor.fontWeight": "400",
+    "editor.fontSize": 12,
+    "terminal.integrated.fontFamily": "'Fira Code','FiraCode NF','Consolas','monospace'",
+    "terminal.integrated.fontWeight": "400",
+    "terminal.integrated.fontSize": 12,
+    "editor.fontLigatures": true,
+    "workbench.colorCustomizations": { "gitlens.trailingLineForegroundColor": "#bbbaba" },
+    "dotnet-test-explorer.testProjectPath": "**/*Test.csproj",
+    "coverage-gutters.showGutterCoverage": true,
+    "coverage-gutters.showLineCoverage": false,
+    "trailing-spaces.syntaxIgnore": ["markdown"],
+    "markdownlint.config": {
+      "MD028": false,
+      "MD025": {
+        "front_matter_title": ""
+      }
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "formulahendry.dotnet-test-explorer",
+      "hbenl.vscode-test-explorer",
+      "ms-dotnettools.csharp",
+      "ms-dotnettools.blazorwasm-companion",
+      "ms-mssql.mssql",
+      "k--kato.docomment",
+      "streetsidesoftware.code-spell-checker",
+      "ryanluker.vscode-coverage-gutters",
+      "editorconfig.editorconfig",
+      "rexebin.f12-open-file",
+      "donjayamanne.githistory",
+      "eamodio.gitlens",
+      "yzhang.markdown-all-in-one",
+      "davidanson.vscode-markdownlint",
+      "christian-kohler.path-intellisense",
+      "wayou.vscode-todo-highlight",
+      "gruntfuggly.todo-tree",
+      "shardulm94.trailing-spaces",
+      "pflannery.vscode-versionlens",
+      "visualstudioexptteam.vscodeintellicode",
+      "vscode-icons-team.vscode-icons",
+      "ms-azuretools.vscode-docker"
+    ],
+    "unwantedRecommendations": [
+      "ms-azuretools.vscode-docker",
+      "ms-kubernetes-tools.vscode-kubernetes-tools",
+      "googlecloudtools.cloudcode",
+      "github.vscode-pull-request-github",
+      "mindaro.mindaro"
+    ]
+  }
+}
