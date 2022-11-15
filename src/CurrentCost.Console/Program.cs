@@ -7,7 +7,7 @@ public class PortChat
 
     public static void Main()
     {
-        string name;
+        //string name;
         string message;
         StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
         Thread readThread = new Thread(Read);
