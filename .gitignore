@@ -370,3 +370,4 @@ MigrationBackup/
 *.env
 
 Software/
+/src/CurrentCost/wwwroot/lib
