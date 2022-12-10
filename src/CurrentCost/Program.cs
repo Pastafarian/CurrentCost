@@ -2,6 +2,7 @@ using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using CurrentCost.Infrastructure.IO.Ports;
+using CurrentCost.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
@@ -15,6 +16,8 @@ builder.Services.AddFontAwesomeIcons();
 #else
     builder.Services.AddSingleton<ISimpleSerialPort, SimpleSerialPort>();
 #endif
+
+builder.Services.AddTransient<IndexViewModel>();
 
 var app = builder.Build();
 app.UseStaticFiles();
