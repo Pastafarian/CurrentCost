@@ -1,0 +1,82 @@
+﻿/* Balsamiq Sans */
+@font-face {
+    font-family: 'Balsamiq Sans';
+    src: url('../fonts/Balsamiq_Sans/BalsamiqSans-Italic.eot');
+    src: local('Balsamiq Sans Italic'), local('BalsamiqSans-Italic'), url('BalsamiqSans-Italic.eot?#iefix') format('embedded-opentype'), url('BalsamiqSans-Italic.woff2') format('woff2'), url('BalsamiqSans-Italic.woff') format('woff'), url('BalsamiqSans-Italic.ttf') format('truetype'), url('BalsamiqSans-Italic.svg#BalsamiqSans-Italic') format('svg');
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Balsamiq Sans';
+    src: url('../fonts/Balsamiq_Sans/BalsamiqSans-Regular.eot');
+    src: local('Balsamiq Sans Regular'), local('BalsamiqSans-Regular'), url('BalsamiqSans-Regular.eot?#iefix') format('embedded-opentype'), url('BalsamiqSans-Regular.woff2') format('woff2'), url('BalsamiqSans-Regular.woff') format('woff'), url('BalsamiqSans-Regular.ttf') format('truetype'), url('BalsamiqSans-Regular.svg#BalsamiqSans-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Balsamiq Sans';
+    src: url('../fonts/Balsamiq_Sans/BalsamiqSans-BoldItalic.eot');
+    src: local('Balsamiq Sans Bold Italic'), local('BalsamiqSans-BoldItalic'), url('BalsamiqSans-BoldItalic.eot?#iefix') format('embedded-opentype'), url('BalsamiqSans-BoldItalic.woff2') format('woff2'), url('BalsamiqSans-BoldItalic.woff') format('woff'), url('BalsamiqSans-BoldItalic.ttf') format('truetype'), url('BalsamiqSans-BoldItalic.svg#BalsamiqSans-BoldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Balsamiq Sans';
+    src: url('../fonts/Balsamiq_Sans/BalsamiqSans-Bold.eot');
+    src: local('Balsamiq Sans Bold'), local('BalsamiqSans-Bold'), url('BalsamiqSans-Bold.eot?#iefix') format('embedded-opentype'), url('BalsamiqSans-Bold.woff2') format('woff2'), url('BalsamiqSans-Bold.woff') format('woff'), url('BalsamiqSans-Bold.ttf') format('truetype'), url('BalsamiqSans-Bold.svg#BalsamiqSans-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Quicksand */
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-Medium.eot');
+    src: local('Quicksand Medium'), local('Quicksand-Medium'), url('Quicksand-Medium.eot?#iefix') format('embedded-opentype'), url('Quicksand-Medium.woff2') format('woff2'), url('Quicksand-Medium.woff') format('woff'), url('Quicksand-Medium.ttf') format('truetype'), url('Quicksand-Medium.svg#Quicksand-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-Regular.eot');
+    src: local('Quicksand Regular'), local('Quicksand-Regular'), url('Quicksand-Regular.eot?#iefix') format('embedded-opentype'), url('Quicksand-Regular.woff2') format('woff2'), url('Quicksand-Regular.woff') format('woff'), url('Quicksand-Regular.ttf') format('truetype'), url('Quicksand-Regular.svg#Quicksand-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-Light.eot');
+    src: local('Quicksand Light'), local('Quicksand-Light'), url('Quicksand-Light.eot?#iefix') format('embedded-opentype'), url('Quicksand-Light.woff2') format('woff2'), url('Quicksand-Light.woff') format('woff'), url('Quicksand-Light.ttf') format('truetype'), url('Quicksand-Light.svg#Quicksand-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-Bold.eot');
+    src: local('Quicksand Bold'), local('Quicksand-Bold'), url('Quicksand-Bold.eot?#iefix') format('embedded-opentype'), url('Quicksand-Bold.woff2') format('woff2'), url('Quicksand-Bold.woff') format('woff'), url('Quicksand-Bold.ttf') format('truetype'), url('Quicksand-Bold.svg#Quicksand-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('Quicksand-SemiBold.eot');
+    src: local('Quicksand SemiBold'), local('Quicksand-SemiBold'), url('Quicksand-SemiBold.eot?#iefix') format('embedded-opentype'), url('Quicksand-SemiBold.woff2') format('woff2'), url('Quicksand-SemiBold.woff') format('woff'), url('Quicksand-SemiBold.ttf') format('truetype'), url('Quicksand-SemiBold.svg#Quicksand-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
