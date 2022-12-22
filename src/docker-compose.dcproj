@@ -9,10 +9,14 @@
     <DockerServiceName>currentcost</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="dev.env" />
+    <None Include="dev.template.env" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="prod.env" />
+    <None Include="prod.template.env" />
   </ItemGroup>
 </Project>
