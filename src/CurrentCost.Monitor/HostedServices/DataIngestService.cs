@@ -1,7 +1,7 @@
-﻿using CurrentCost.Infrastructure.IO.Ports;
-using System.IO.Ports;
+﻿using System.IO.Ports;
+using CurrentCost.Monitor.Infrastructure.IO.Ports;
 
-namespace CurrentCost.HostedServices;
+namespace CurrentCost.Monitor.HostedServices;
 
 public class DataIngestService : BackgroundService
 {
@@ -9,7 +9,8 @@ public class DataIngestService : BackgroundService
     private ISimpleSerialPort _serialPort = null!;
     private Thread _readThread = null!;
 
-    public DataIngestService() { }
+    public DataIngestService(ISimpleSerialPort serialPort)
+        => _serialPort = serialPort;
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {

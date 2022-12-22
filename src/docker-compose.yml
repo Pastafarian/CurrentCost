@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  currentcost:
+    image: ${DOCKER_REGISTRY-}currentcost
+    build:
+      context: .
+      dockerfile: CurrentCost/Dockerfile
