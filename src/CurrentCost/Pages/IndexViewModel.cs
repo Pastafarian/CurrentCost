@@ -1,15 +1,29 @@
 ﻿using Blazorise.Charts;
+using Blazorise.LoadingIndicator;
 
 namespace CurrentCost.Pages;
 
 public class IndexViewModel
 {
     public LineChart<double> LineChart { get; set; }
+    public LoadingIndicator LoadingIndicator { get; set; }
 
     public async Task HandleRedraw()
     {
-        await LineChart.Clear();
-        await LineChart.AddLabelsDatasetsAndUpdate(Labels, GetLineChartDataset());
+        try
+        {
+            await LoadingIndicator.Show();
+
+            // Simulate server call ...
+            await Task.Delay(3000); 
+
+            await LineChart.Clear();
+            await LineChart.AddLabelsDatasetsAndUpdate(Labels, GetLineChartDataset());
+        }
+        finally
+        {
+            await LoadingIndicator.Hide();
+        }
     }
 
     private LineChartDataset<double> GetLineChartDataset()

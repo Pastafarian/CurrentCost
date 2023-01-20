@@ -16,11 +16,6 @@
       "provider": "cdnjs",
       "library": "Chart.js@3.7.1",
       "destination": "wwwroot/lib/Chart.js/"
-    },
-    {
-      "provider": "cdnjs",
-      "library": "Chart.js@3.7.1",
-      "destination": "wwwroot/lib/Chart.js/"
     }
   ]
 }
