@@ -1,8 +1,8 @@
-version: '3.4'
+version: '3.7'
 
 services:
   currentcost:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
+    env_file:
+      - dev.env
