@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrentCost.Test", "Current
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrentCost", "CurrentCost\CurrentCost.csproj", "{FB3DF4A0-5045-482F-B7D2-1DB019E4464F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrentCost.Monitor", "CurrentCost.Monitor\CurrentCost.Monitor.csproj", "{2EA165B0-4308-48FB-9A3D-A19343295053}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrentCost.Monitor", "CurrentCost.Monitor\CurrentCost.Monitor.csproj", "{2EA165B0-4308-48FB-9A3D-A19343295053}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{260A14AF-3C1B-4387-ADD5-5A7FF6803B3C}"
 EndProject
