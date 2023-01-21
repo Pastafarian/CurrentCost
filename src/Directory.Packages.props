@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <!--See: https://devblogs.microsoft.com/nuget/introducing-central-package-management/-->
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!--Shared / Common-->
+    <PackageVersion Include="AspNetCore.HealthChecks.ApplicationStatus" Version="6.0.0" />
+    <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
+    <PackageVersion Include="System.IO.Ports" Version="7.0.0" />
+    <PackageVersion Include="Ardalis.GuardClauses" Version="4.0.1" />
+    <PackageVersion Include="FluentValidation" Version="11.4.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <!--CurrentCost-->
+    <PackageVersion Include="Blazorise.Charts" Version="1.1.6" />
+    <PackageVersion Include="Blazorise.Bootstrap5" Version="1.1.6" />
+    <PackageVersion Include="Blazorise.Components" Version="1.1.6" />
+    <PackageVersion Include="Blazorise.FluentValidation" Version="1.1.6" />
+    <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.1.6" />
+    <PackageVersion Include="Blazorise.LoadingIndicator" Version="1.1.6" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    <!--CurrentCost.Console-->
+    <!--No project specific packages-->
+    <!--CurrentCost.Monitor-->
+    <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
+    <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.5" />
+    <!--CurrentCost.Test-->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
+    <PackageVersion Include="FluentAssertions" Version="6.9.0" />
+    <PackageVersion Include="Moq" Version="4.18.4" />
+    <PackageVersion Include="xunit" Version="2.4.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
+  </ItemGroup>
+</Project>
