@@ -17,13 +17,14 @@ builder.Services.AddTransient<IndexViewModel>();
 
 var app = builder.Build();
 app.UseStaticFiles();
+app.UseRouting();
 app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
    .UseHealthChecks("/healthz", new HealthCheckOptions
    {
        Predicate = _ => true,
        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
    });
-app.UseRouting();
+app.UseHealthChecksPrometheusExporter("/metrics");
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.Run();
