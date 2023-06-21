@@ -1,4 +1,4 @@
-﻿using System.IO.Ports;
+using System.IO.Ports;
 
 public class PortChat
 {
@@ -9,11 +9,32 @@ public class PortChat
     {
         //string name;
         string message;
-        StringComparer stringComparer = StringComparer.OrdinalIgnoreCase;
-        Thread readThread = new Thread(Read);
+        var stringComparer = StringComparer.OrdinalIgnoreCase;
+        var readThread = new Thread(Read);
 
         // Create a new SerialPort object with default settings.
-        _serialPort = new SerialPort();
+        _serialPort = new SerialPort
+        {
+            Site = null,
+            BaudRate = 0,
+            BreakState = false,
+            DataBits = 0,
+            DiscardNull = false,
+            DtrEnable = false,
+            Encoding = null,
+            Handshake = Handshake.None,
+            NewLine = null,
+            Parity = Parity.None,
+            ParityReplace = 0,
+            PortName = null,
+            ReadBufferSize = 0,
+            ReadTimeout = 0,
+            ReceivedBytesThreshold = 0,
+            RtsEnable = false,
+            StopBits = StopBits.None,
+            WriteBufferSize = 0,
+            WriteTimeout = 0
+        };
 
         // Allow the user to set the appropriate properties.
         _serialPort.PortName = "COM6"; //SetPortName(_serialPort.PortName);
@@ -46,8 +67,8 @@ public class PortChat
             }
             else
             {
-                _serialPort.WriteLine(Environment.NewLine + Environment.NewLine + 
-                    String.Format("<{0}>: {1}", _serialPort.PortName, message));
+                _serialPort.WriteLine(Environment.NewLine + Environment.NewLine +
+                                      $"<{_serialPort.PortName}>: {message}");
             }
         }
 
@@ -61,7 +82,7 @@ public class PortChat
         {
             try
             {
-                string message = _serialPort.ReadLine();
+                var message = _serialPort.ReadLine();
                 Console.WriteLine(message);
             }
             catch (TimeoutException) { }
@@ -74,7 +95,7 @@ public class PortChat
         string portName;
 
         Console.WriteLine("Available Ports:");
-        foreach (string s in SerialPort.GetPortNames())
+        foreach (var s in SerialPort.GetPortNames())
         {
             Console.WriteLine("   {0}", s);
         }
@@ -82,7 +103,7 @@ public class PortChat
         Console.Write("Enter COM port value (Default: {0}): ", defaultPortName);
         portName = Console.ReadLine();
 
-        if (portName == "" || !(portName.ToLower()).StartsWith("com"))
+        if (portName == "" || !portName.ToLower().StartsWith("com"))
         {
             portName = defaultPortName;
         }
@@ -107,16 +128,14 @@ public class PortChat
     // Display PortParity values and prompt user to enter a value.
     public static Parity SetPortParity(Parity defaultPortParity)
     {
-        string parity;
-
         Console.WriteLine("Available Parity options:");
-        foreach (string s in Enum.GetNames(typeof(Parity)))
+        foreach (var s in Enum.GetNames(typeof(Parity)))
         {
             Console.WriteLine("   {0}", s);
         }
 
         Console.Write("Enter Parity value (Default: {0}):", defaultPortParity.ToString(), true);
-        parity = Console.ReadLine();
+        var parity = Console.ReadLine();
 
         if (parity == "")
         {
@@ -147,7 +166,7 @@ public class PortChat
         string stopBits;
 
         Console.WriteLine("Available StopBits options:");
-        foreach (string s in Enum.GetNames(typeof(StopBits)))
+        foreach (var s in Enum.GetNames(typeof(StopBits)))
         {
             Console.WriteLine("   {0}", s);
         }
@@ -168,7 +187,7 @@ public class PortChat
         string handshake;
 
         Console.WriteLine("Available Handshake options:");
-        foreach (string s in Enum.GetNames(typeof(Handshake)))
+        foreach (var s in Enum.GetNames(typeof(Handshake)))
         {
             Console.WriteLine("   {0}", s);
         }

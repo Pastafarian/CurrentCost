@@ -4,6 +4,36 @@ version: '3.7'
 # https://docs.docker.com/compose/compose-file/build/
 
 services:
+  otel-collector:
+    image: otel/opentelemetry-collector:0.73.0
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./scripts/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "8888:8888" 
+      - "8889:8889" 
+      - "13133:13133"
+      - "4317:4317"
+    networks:
+      - currentcost-network
+  prometheus:
+    build: 
+      context: ./scripts/prometheus
+    depends_on:
+      - otel-collector
+    ports:
+      - 9090:9090
+    networks:
+      - currentcost-network
+  grafana:
+    build: 
+      context: ./scripts/grafana
+    depends_on:
+      - prometheus
+    ports:
+      - 3000:3000
+    networks:
+      - currentcost-network
   currentcost:
     image: ${DOCKER_REGISTRY-}currentcost
     container_name: 'current-cost'
@@ -14,11 +44,22 @@ services:
       - prod.env
     ports:
       - 80:80 # expose to host LAN
-    depends_on:
-      - rabbitmq
-      - postgres
     networks:
-      - currentcost
+      - currentcost-network
+  currentcostmonitor:
+    image: ${DOCKER_REGISTRY-}current-cost-monitor
+    container_name: 'current-cost-monitor'
+    build:
+      context: .
+      dockerfile: CurrentCost.Monitor/Dockerfile
+    env_file:
+      - prod.env
+    ports:
+      - 82:82 # expose to host LAN
+    depends_on:
+      - otel-collector
+    networks:
+      - currentcost-network
 
   #prometheus: # https://prometheus.io/docs/introduction/overview/
   #  # https://prometheus.io/docs/guides/cadvisor/#docker-compose-configuration
@@ -62,7 +103,7 @@ services:
       - ~/.docker-conf/current-cost/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/current-cost/rabbitmq/log/:/var/log/rabbitmq
     networks:
-      - currentcost
+      - currentcost-network
 
   postgres:
     image: postgres:15.1-alpine
@@ -73,7 +114,7 @@ services:
     ports:
       - 127.0.0.1:5432:5432 #   restrict to host only NOT LAN
     networks:
-      - currentcost
+      - currentcost-network
 
 networks:
-  currentcost:
+  currentcost-network:

@@ -4,8 +4,27 @@ using Blazorise.Icons.FontAwesome;
 using CurrentCost.Pages;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenTelemetry().WithMetrics(opts => opts
+    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("BookStore.WebApi"))
+    .AddAspNetCoreInstrumentation()
+    .AddProcessInstrumentation()
+    .AddRuntimeInstrumentation()
+    .AddView(
+        instrumentName: "orders-price",
+        new ExplicitBucketHistogramConfiguration { Boundaries = new double[] { 15, 30, 45, 60, 75 } })
+    .AddView(
+        instrumentName: "orders-number-of-books",
+        new ExplicitBucketHistogramConfiguration { Boundaries = new double[] { 1, 2, 5 } })
+    .AddOtlpExporter(options =>
+    {
+        options.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"]
+                                   ?? throw new InvalidOperationException());
+    }));
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazorise(options => options.Immediate = true);

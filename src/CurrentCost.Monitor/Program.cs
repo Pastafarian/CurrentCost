@@ -6,19 +6,47 @@ using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System.Reflection;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var resouces = ResourceBuilder.CreateDefault().AddService(Assembly.GetAssembly(typeof(Program))?.FullName ?? "CurrentCost.Monitor");
+builder.Logging.AddOpenTelemetry(x =>
+{
+    x.SetResourceBuilder(resouces);
+    x.IncludeFormattedMessage = true;
+    x.AddConsoleExporter(options =>
+    {
+        if (options == null) throw new ArgumentNullException(nameof(options));
+        options.Targets = ConsoleExporterOutputTargets.Debug;
+    });
+});
 
 builder.Services.AddOpenTelemetry()
     .WithTracing(tracerProviderBuilder =>
     {
-        var serviceVersion = Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? string.Empty;
-        tracerProviderBuilder.AddSource(DataIngestService.Name()).SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(serviceName: DataIngestService.Name(), serviceVersion: serviceVersion));
-
+        tracerProviderBuilder.AddSource(DataIngestService.Name()).SetResourceBuilder(resouces);
         tracerProviderBuilder.AddAspNetCoreInstrumentation();
-
-        tracerProviderBuilder.AddConsoleExporter();
-    });
+        tracerProviderBuilder.AddConsoleExporter(options =>
+        {
+            if (options == null) throw new ArgumentNullException(nameof(options));
+            options.Targets = ConsoleExporterOutputTargets.Debug;
+        });
+    }).WithMetrics(opts =>
+    {
+        opts.SetResourceBuilder(resouces);
+        opts.AddAspNetCoreInstrumentation();
+        opts.AddRuntimeInstrumentation();
+        opts.AddProcessInstrumentation();
+        opts.AddOtlpExporter(x =>
+        {
+            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+            x.Endpoint = new Uri(otlpEndpoint);
+        });   
+    }); 
 
 builder.Services.AddHealthChecks();
 
@@ -50,3 +78,7 @@ app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
 app.UseHealthChecksPrometheusExporter("/metrics");
 app.UseEndpoints(config => config.MapHealthChecksUI()); // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks
 app.Run();
+
+public partial class Program
+{
+}

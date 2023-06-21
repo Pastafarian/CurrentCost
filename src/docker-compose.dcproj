@@ -18,5 +18,22 @@
     <None Include=".dockerignore" />
     <None Include="prod.env" />
     <None Include="prod.template.env" />
+    <None Include="scripts\grafana\dashboards\bookstore-dashboard.json" />
+    <None Include="scripts\grafana\dashboards\dotnet-performance-counters-dashboard.json" />
+    <None Include="scripts\grafana\dashboards\http-requests-dashboard.json" />
+    <None Include="scripts\grafana\Dockerfile" />
+    <None Include="scripts\grafana\prometheus-connector.yml" />
+    <None Include="scripts\grafana\prometheus-dashboards.yml" />
+    <None Include="scripts\otel-collector\otel-collector-config.yaml" />
+    <None Include="scripts\prometheus\Dockerfile" />
+    <None Include="scripts\prometheus\prometheus.yml" />
+    <None Include="scripts\sql\Dockerfile" />
+    <None Include="scripts\sql\entrypoint.sh" />
+    <None Include="scripts\sql\import-data.sh" />
+    <None Include="scripts\sql\setup.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="scripts\grafana\obj\Docker\empty\" />
+    <Folder Include="scripts\prometheus\obj\Docker\empty\" />
   </ItemGroup>
 </Project>

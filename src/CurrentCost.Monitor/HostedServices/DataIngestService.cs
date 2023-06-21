@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO.Ports;
 using System.Reflection;
 using CurrentCost.Monitor.Infrastructure.IO.Ports;
 
@@ -7,55 +8,50 @@ namespace CurrentCost.Monitor.HostedServices;
 public class DataIngestService : BackgroundService
 {
     private bool _continue;
-    private ISimpleSerialPort _serialPort = null!;
+    private readonly ISimpleSerialPort _serialPort = null!;
     private Thread _readThread = null!;
 
-    private readonly ActivitySource _activitySource = new ActivitySource(Name());
-
+    private readonly ActivitySource _activitySource;
+   
     public DataIngestService(ISimpleSerialPort serialPort)
-        => _serialPort = serialPort;
-
+    {
+        _serialPort = serialPort;
+        _activitySource = new ActivitySource(nameof(DataIngestService.ExecuteAsync));
+        var activityListener = new ActivityListener
+        {
+            ShouldListenTo = s => true,
+            SampleUsingParentId = (ref ActivityCreationOptions<string> activityOptions) => ActivitySamplingResult.AllData,
+            Sample = (ref ActivityCreationOptions<ActivityContext> activityOptions) => ActivitySamplingResult.AllData
+        };
+        ActivitySource.AddActivityListener(activityListener);
+    }
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var activity = _activitySource.StartActivity(nameof(DataIngestService.ExecuteAsync));
-        activity?.SetTag("testTag", "testValue");
+        _readThread = new Thread(() =>
+        {
+            while (_continue)
+            {
+                try
+                {
+                    using var activity = _activitySource.StartActivity(nameof(DataIngestService.ExecuteAsync));
+                    var message1 = _serialPort.ReadLine();
+                    activity?.SetEndTime(DateTime.UtcNow);
+                    //_serialPort.WriteLine(Environment.NewLine + Environment.NewLine + string.Format("<{0}>: {1}", _serialPort.PortName, message));
+                }
+                catch (TimeoutException) { }
+            }
+        });
+
+        _serialPort.Open();
+
+        _continue = true;
+
+        _readThread.Start();
+        _readThread.Join();
+
+        _serialPort.Close();
+        
         return Task.CompletedTask;
-
-        // TODO: DataIngestService.ExecuteAsync
-        //var message = string.Empty;
-        //var stringComparer = StringComparer.OrdinalIgnoreCase;
-        //_readThread = new Thread(() =>
-        //{
-        //    while (_continue)
-        //    {
-        //        try
-        //        {
-        //            string message1 = _serialPort.ReadLine();
-        //            //_serialPort.WriteLine(Environment.NewLine + Environment.NewLine + string.Format("<{0}>: {1}", _serialPort.PortName, message));
-        //        }
-        //        catch (TimeoutException) { }
-        //    }
-        //});
-
-        //// Create a new SerialPort object with default settings.
-        //_serialPort = new SimpleSerialPort()
-        //{
-        //    BaudRate = 57600,
-        //    Parity = Parity.None,
-        //    DataBits = 8,
-        //    StopBits = StopBits.One,
-        //    Handshake = Handshake.None,
-        //    ReadTimeout = 500,
-        //    WriteTimeout = 500
-        //};
-        //_serialPort.Open();
-
-        //_continue = true;
-
-        //_readThread.Start();
-        //_readThread.Join();
-
-        //_serialPort.Close();
     }
 
     public void Stop() => _continue = false;

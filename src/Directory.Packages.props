@@ -10,10 +10,15 @@
     <PackageVersion Include="AspNetCore.HealthChecks.ApplicationStatus" Version="7.0.0-rc2.3" />
     <PackageVersion Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="7.0.0-rc2.4" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="7.0.0-rc2.7" />
-    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.3.2" />
+    <PackageVersion Include="OpenTelemetry.Api.ProviderBuilderExtensions" Version="1.5.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Console" Version="1.5.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.5.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.Prometheus" Version="1.3.0-rc.2" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.4.0-rc.2" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.0.0-rc9.11" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.5.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.5.0-rc.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.3" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.5.0" />
     <PackageVersion Include="System.IO.Ports" Version="7.0.0" />
     <PackageVersion Include="FluentValidation" Version="11.4.0" />
     <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
@@ -26,7 +31,7 @@
     <PackageVersion Include="Blazorise.FluentValidation" Version="1.1.6" />
     <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.1.6" />
     <PackageVersion Include="Blazorise.LoadingIndicator" Version="1.1.6" />
-    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
     <!--CurrentCost.Console-->
     <!--No project specific packages-->
