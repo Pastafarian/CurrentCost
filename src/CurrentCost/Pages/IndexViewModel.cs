@@ -1,4 +1,4 @@
-﻿using Blazorise.Charts;
+using Blazorise.Charts;
 using Blazorise.LoadingIndicator;
 
 namespace CurrentCost.Pages;
@@ -18,7 +18,7 @@ public class IndexViewModel
             await Task.Delay(3000); 
 
             await LineChart.Clear();
-            await LineChart.AddLabelsDatasetsAndUpdate(Labels, GetLineChartDataset());
+            await LineChart.AddLabelsDatasetsAndUpdate(_labels, GetLineChartDataset());
         }
         finally
         {
@@ -26,21 +26,18 @@ public class IndexViewModel
         }
     }
 
-    private LineChartDataset<double> GetLineChartDataset()
+    private LineChartDataset<double> GetLineChartDataset() => new LineChartDataset<double>
     {
-        return new LineChartDataset<double>
-        {
-            Label = "# of randoms",
-            Data = RandomizeData(),
-            BackgroundColor = backgroundColors,
-            BorderColor = borderColors,
-            Fill = true,
-            PointRadius = 3,
-            CubicInterpolationMode = "monotone",
-        };
-    }
+        Label = "# of randoms",
+        Data = RandomizeData(),
+        BackgroundColor = backgroundColors,
+        BorderColor = borderColors,
+        Fill = true,
+        PointRadius = 3,
+        CubicInterpolationMode = "monotone",
+    };
 
-    private string[] Labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
+    private readonly string[] _labels = { "Red", "Blue", "Yellow", "Green", "Purple", "Orange" };
     private List<string> backgroundColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 0.2f), ChartColor.FromRgba(54, 162, 235, 0.2f), ChartColor.FromRgba(255, 206, 86, 0.2f), ChartColor.FromRgba(75, 192, 192, 0.2f), ChartColor.FromRgba(153, 102, 255, 0.2f), ChartColor.FromRgba(255, 159, 64, 0.2f) };
     private List<string> borderColors = new List<string> { ChartColor.FromRgba(255, 99, 132, 1f), ChartColor.FromRgba(54, 162, 235, 1f), ChartColor.FromRgba(255, 206, 86, 1f), ChartColor.FromRgba(75, 192, 192, 1f), ChartColor.FromRgba(153, 102, 255, 1f), ChartColor.FromRgba(255, 159, 64, 1f) };
 

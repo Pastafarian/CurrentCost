@@ -16,8 +16,10 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="otel-collector-config.yaml" />
     <None Include="prod.env" />
     <None Include="prod.template.env" />
+    <None Include="prometheus.yml" />
     <None Include="scripts\grafana\dashboards\bookstore-dashboard.json" />
     <None Include="scripts\grafana\dashboards\dotnet-performance-counters-dashboard.json" />
     <None Include="scripts\grafana\dashboards\http-requests-dashboard.json" />

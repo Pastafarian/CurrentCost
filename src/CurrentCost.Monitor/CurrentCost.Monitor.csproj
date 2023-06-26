@@ -21,17 +21,28 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="MassTransit" />
+    <PackageReference Include="MassTransit.AspNetCore" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" />
     <PackageReference Include="OpenTelemetry.Api.ProviderBuilderExtensions" />
     <PackageReference Include="OpenTelemetry.Exporter.Console" />
     <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
+    <PackageReference Include="RabbitMQ.Client" />
     <PackageReference Include="System.IO.Ports" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
   
     <PackageReference Include="OpenTelemetry.Instrumentation.Runtime" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Process" />
+    <PackageReference Include="System.Runtime.Serialization.Xml" />
+    <PackageReference Include="System.Xml.XmlSerializer" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <ProjectReference Include="..\CurrentCost.Messages\CurrentCost.Messages.csproj" />
   </ItemGroup>  
   
 </Project>

@@ -1,52 +1,68 @@
+using CurrentCost.Messages.Common;
 using CurrentCost.Monitor.HostedServices;
+using CurrentCost.Monitor.Infrastructure;
 using CurrentCost.Monitor.Infrastructure.IO.Ports;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using OpenTelemetry;
 using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
-using System.Reflection;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using Microsoft.AspNetCore.Builder;
+using CurrentCost.Monitor.Infrastructure.Deserialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var resouces = ResourceBuilder.CreateDefault().AddService(Assembly.GetAssembly(typeof(Program))?.FullName ?? "CurrentCost.Monitor");
+builder.Host.UseDefaultServiceProvider(
+    (_, options) =>
+    {
+        options.ValidateOnBuild = true;
+        options.ValidateScopes = true;
+    });
 builder.Logging.AddOpenTelemetry(x =>
 {
-    x.SetResourceBuilder(resouces);
+    x.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("CurrentCost.Monitor"));
     x.IncludeFormattedMessage = true;
     x.AddConsoleExporter(options =>
     {
         if (options == null) throw new ArgumentNullException(nameof(options));
         options.Targets = ConsoleExporterOutputTargets.Debug;
     });
+
 });
 
-builder.Services.AddOpenTelemetry()
-    .WithTracing(tracerProviderBuilder =>
-    {
-        tracerProviderBuilder.AddSource(DataIngestService.Name()).SetResourceBuilder(resouces);
-        tracerProviderBuilder.AddAspNetCoreInstrumentation();
-        tracerProviderBuilder.AddConsoleExporter(options =>
-        {
-            if (options == null) throw new ArgumentNullException(nameof(options));
-            options.Targets = ConsoleExporterOutputTargets.Debug;
-        });
-    }).WithMetrics(opts =>
-    {
-        opts.SetResourceBuilder(resouces);
-        opts.AddAspNetCoreInstrumentation();
-        opts.AddRuntimeInstrumentation();
-        opts.AddProcessInstrumentation();
-        opts.AddOtlpExporter(x =>
-        {
-            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
-            x.Endpoint = new Uri(otlpEndpoint);
-        });   
-    }); 
+CurrentCostMonitorMetrics metrics = new();
+
+builder.Services.AddOpenTelemetry().WithMetrics(opts => opts
+    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+        .AddService("CurrentCost.Monitor"))
+    .AddMeter(metrics.MetricName)
+    .AddAspNetCoreInstrumentation()
+    .AddProcessInstrumentation()
+    .AddRuntimeInstrumentation()
+    .AddOtlpExporter(options => options.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"]
+                                   ?? throw new InvalidOperationException())));
+//builder.Services.AddOpenTelemetry()
+//    .WithTracing(tracerProviderBuilder =>
+//    {
+//        tracerProviderBuilder.AddSource(DataIngestService.Name()).SetResourceBuilder(resouces);
+//        tracerProviderBuilder.AddAspNetCoreInstrumentation();
+//        tracerProviderBuilder.AddConsoleExporter(options =>
+//        {
+//            if (options == null) throw new ArgumentNullException(nameof(options));
+//            options.Targets = ConsoleExporterOutputTargets.Debug;
+//        });
+//    }).WithMetrics(opts =>
+//    {
+//        opts.SetResourceBuilder(resouces);
+//        opts.AddAspNetCoreInstrumentation();
+//        opts.AddRuntimeInstrumentation();
+//        opts.AddProcessInstrumentation();
+//        opts.AddOtlpExporter(x =>
+//        {
+//            var otlpEndpoint = builder.Configuration["Otlp:Endpoint"];
+//            x.Endpoint = new Uri(otlpEndpoint);
+//        });   
+//    }); 
 
 builder.Services.AddHealthChecks();
 
@@ -60,12 +76,26 @@ builder.Services.AddHealthChecksUI(setupSettings: setup =>
     setup.SetEvaluationTimeInSeconds(5); // Configures the UI to poll for healthchecks updates every 5 seconds
 }).AddInMemoryStorage();
 
-#if DEBUG
-builder.Services.AddSingleton<ISimpleSerialPort, SimpleSerialPortEmulator>();
-#else
+var testMode = bool.Parse(builder.Configuration["TestMode"]);
+if (testMode)
+{
+    builder.Services.AddSingleton<ISimpleSerialPort, SimpleSerialPortEmulator>();
+}
+else
+{
     builder.Services.AddSingleton<ISimpleSerialPort, SimpleSerialPort>();
-#endif
+}
+
+builder.Services.AddEventBusService(builder.Configuration);
+builder.Services.AddScoped<IMessageStrategyService, MessageStrategyService>();
+builder.Services.AddScoped<MessageStrategy, StandardMessageStrategy>();
+builder.Services.AddScoped<MessageStrategy, UnknownMessageStrategy>();
+builder.Services.AddScoped<IMessageSender, MessageSender>();
+builder.Services.AddScoped<IMonitorMessageDeserializer, MonitorMessageDeserializer>();
+builder.Services.AddScoped<IDataIngestServiceProcessor, DataIngestServiceProcessor>();
 builder.Services.AddHostedService<DataIngestService>();
+
+builder.Logging.Services.AddSingleton<CurrentCostMonitorMetrics>();
 
 var app = builder.Build();
 app.UseRouting();

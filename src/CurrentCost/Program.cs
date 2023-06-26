@@ -9,16 +9,12 @@ using OpenTelemetry.Resources;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenTelemetry().WithMetrics(opts => opts
-    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("BookStore.WebApi"))
+    .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("CurrentCost.Web")
+        .AddAttributes(new List<KeyValuePair<string, object>> { new("Application", "CurrentCost.Web") })
+    )
     .AddAspNetCoreInstrumentation()
     .AddProcessInstrumentation()
     .AddRuntimeInstrumentation()
-    .AddView(
-        instrumentName: "orders-price",
-        new ExplicitBucketHistogramConfiguration { Boundaries = new double[] { 15, 30, 45, 60, 75 } })
-    .AddView(
-        instrumentName: "orders-number-of-books",
-        new ExplicitBucketHistogramConfiguration { Boundaries = new double[] { 1, 2, 5 } })
     .AddOtlpExporter(options =>
     {
         options.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"]
