@@ -103,14 +103,13 @@ public class DataIngestServiceProcessor : IDataIngestServiceProcessor
 
     public Task Process(CancellationToken stoppingToken)
     {
-        Thread.Sleep(1000);
         _cancellationToken = stoppingToken;
         _serialPort.Open();
         _serialPort.DataReceived += SerialPortOnDataReceived;
 
         while (!stoppingToken.IsCancellationRequested)
         {
-          _serialPort.DataReceived += SerialPortOnDataReceived;
+            Task.Yield();
         }
 
         _serialPort.Close();

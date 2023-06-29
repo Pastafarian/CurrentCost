@@ -12,6 +12,7 @@ using OpenTelemetry.Metrics;
 using CurrentCost.Monitor.Infrastructure.Deserialization;
 using Serilog;
 using Serilog.Data;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,12 +98,12 @@ else
 }
 
 builder.Services.AddEventBusService(builder.Configuration);
-builder.Services.AddScoped<IMessageStrategyService, MessageStrategyService>();
-builder.Services.AddScoped<MessageStrategy, StandardMessageStrategy>();
-builder.Services.AddScoped<MessageStrategy, UnknownMessageStrategy>();
-builder.Services.AddScoped<IMessageSender, MessageSender>();
-builder.Services.AddScoped<IMonitorMessageDeserializer, MonitorMessageDeserializer>();
-builder.Services.AddScoped<IDataIngestServiceProcessor, DataIngestServiceProcessor>();
+builder.Services.AddSingleton<IMessageStrategyService, MessageStrategyService>();
+builder.Services.AddSingleton<MessageStrategy, StandardMessageStrategy>();
+builder.Services.AddSingleton<MessageStrategy, UnknownMessageStrategy>();
+builder.Services.AddSingleton<IMessageSender, MessageSender>();
+builder.Services.AddSingleton<IMonitorMessageDeserializer, MonitorMessageDeserializer>();
+builder.Services.AddSingleton<IDataIngestServiceProcessor, DataIngestServiceProcessor>();
 builder.Services.AddHostedService<DataIngestService>();
 
 builder.Logging.Services.AddSingleton<CurrentCostMonitorMetrics>();

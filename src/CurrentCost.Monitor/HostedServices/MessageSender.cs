@@ -30,7 +30,7 @@ namespace CurrentCost.Monitor.HostedServices
 
             try
             {
-                Debug.WriteLine("Sending message");
+                _logger.LogInformation("Sending message");
                 //await _publishEndpoint.Publish<INotificationCreated>(new
                 //{
                 //    NotificationDate = DateTime.Now,

@@ -9,11 +9,6 @@ sealed internal class SimpleSerialPortEmulator : ISimpleSerialPort
 
     public event SerialDataReceivedEventHandler? DataReceived ;
 
-    public SimpleSerialPortEmulator(ILogger<SimpleSerialPortEmulator> logger)
-    {
-        _logger = logger;
-    }
-
     void timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         var constructor = typeof(SerialDataReceivedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
@@ -21,16 +16,17 @@ sealed internal class SimpleSerialPortEmulator : ISimpleSerialPort
 
 
 
-        _logger.LogInformation("timer elapsed in Serial Port Emulator");
+        _logger.LogInformation("timer elapsed in Serial Port Emulator {SignalTime}", e.SignalTime);
         DataReceived?.Invoke(this, eventArgs);
         Console.Write("FOO");
     }
-    public SimpleSerialPortEmulator()
+    public SimpleSerialPortEmulator(ILogger<SimpleSerialPortEmulator> logger)
     {
+        _logger = logger;
         var timer = new System.Timers.Timer(1000 * 5);
         timer.Elapsed += timer_Elapsed;
         timer.Enabled = true;
-        Console.WriteLine("Timer has started");
+        _logger.LogInformation("Serial Port Emulator created");
     }
 
     public void Close()
