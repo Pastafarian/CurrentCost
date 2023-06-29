@@ -1,18 +1,27 @@
 using System.IO.Ports;
 using System.Reflection;
-using Timer = System.Timers.Timer;
 
 namespace CurrentCost.Monitor.Infrastructure.IO.Ports;
 
 sealed internal class SimpleSerialPortEmulator : ISimpleSerialPort
 {
+    private readonly ILogger<SimpleSerialPortEmulator> _logger;
+
     public event SerialDataReceivedEventHandler? DataReceived ;
 
+    public SimpleSerialPortEmulator(ILogger<SimpleSerialPortEmulator> logger)
+    {
+        _logger = logger;
+    }
 
     void timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
     {
         var constructor = typeof(SerialDataReceivedEventArgs).GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, new[] { typeof(SerialData) }, null);
         var eventArgs = (SerialDataReceivedEventArgs)constructor.Invoke(new object[] { SerialData.Eof });
+
+
+
+        _logger.LogInformation("timer elapsed in Serial Port Emulator");
         DataReceived?.Invoke(this, eventArgs);
         Console.Write("FOO");
     }

@@ -4,36 +4,52 @@ version: '3.7'
 # https://docs.docker.com/compose/compose-file/build/
 
 services:
-  otel-collector:
-    image: otel/opentelemetry-collector:0.73.0
-    command: ["--config=/etc/otel-collector-config.yaml"]
+  rabbitmq: # Defaults to guest / guest
+    image: rabbitmq:3-management
+    container_name: 'rabbit-mq'
+    hostname: rabbitmq
+    env_file:
+      - prod.env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    expose:
+     - 15672
+     - 5672
+     #- 127.0.0.1:5672:5672 #   restrict to host only NOT LAN
+      #- 127.0.0.1:15672:15672 # restrict to host only NOT LAN
     volumes:
-      - ./scripts/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "8888:8888" 
-      - "8889:8889" 
-      - "13133:13133"
-      - "4317:4317"
+      - ~/.docker-conf/current-cost/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/current-cost/rabbitmq/log/:/var/log/rabbitmq
     networks:
       - currentcost-network
-  prometheus:
-    build: 
-      context: ./scripts/prometheus
-    depends_on:
-      - otel-collector
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+  seq:
+    image: datalust/seq:latest
     ports:
-      - 9090:9090
+      - '81:80'
+      - '5341:5341'
+    environment:
+      ACCEPT_EULA: Y
     networks:
       - currentcost-network
-  grafana:
-    build: 
-      context: ./scripts/grafana
-    depends_on:
-      - prometheus
-    ports:
-      - 3000:3000
-    networks:
-      - currentcost-network
+  #seq:
+  #  image: datalust/seq:latest
+  #  container_name: seq
+  #  hostname: seq
+  #  restart: unless-stopped
+  #  environment:
+  #      - ACCEPT_EULA=Y
+  #  ports:
+  #      - "81:80"
+  #      - 5341:80 
+  #  volumes:
+  #  - seq-logs:/data
+ 
   currentcost:
     image: ${DOCKER_REGISTRY-}currentcost
     container_name: 'current-cost'
@@ -44,8 +60,12 @@ services:
       - prod.env
     ports:
       - 80:80 # expose to host LAN
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     networks:
       - currentcost-network
+ 
   currentcostmonitor:
     image: ${DOCKER_REGISTRY-}current-cost-monitor
     container_name: 'current-cost-monitor'
@@ -53,14 +73,47 @@ services:
       context: .
       dockerfile: CurrentCost.Monitor/Dockerfile
     env_file:
-      - prod.env
+       - prod.env
     ports:
-      - 82:82 # expose to host LAN
-    depends_on:
-      - otel-collector
+    - 82:82 # expose to host LAN
+    - 5342:5342
+    depends_on: #- otel-collector
+      seq:
+         condition: service_started
+      rabbitmq:
+        condition: service_healthy
     networks:
       - currentcost-network
-
+      #otel-collector:
+  #  image: otel/opentelemetry-collector:0.73.0
+  #  command: ["--config=/etc/otel-collector-config.yaml"]
+  #  volumes:
+  #    - ./scripts/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+  #  ports:
+  #    - "8888:8888" 
+  #    - "8889:8889" 
+  #    - "13133:13133"
+  #    - "4317:4317"
+  #  networks:
+  #    - currentcost-network
+  #prometheus:
+  #  build: 
+  #    context: ./scripts/prometheus
+  #  depends_on:
+  #    - otel-collector
+  #  ports:
+  #    - 9090:9090
+  #  networks:
+  #    - currentcost-network
+  ##grafana:
+  ##  build: 
+  ##    context: ./scripts/grafana
+  ##  depends_on:
+  ##    - prometheus
+  ##  ports:
+  ##    - 3000:3000
+  ##  networks:
+  ##    - currentcost-network
   #prometheus: # https://prometheus.io/docs/introduction/overview/
   #  # https://prometheus.io/docs/guides/cadvisor/#docker-compose-configuration
   #  image: prom/prometheus:latest
@@ -91,20 +144,6 @@ services:
   #  networks:
   #    - currentcost
 
-  rabbitmq: # Defaults to guest / guest
-    image: rabbitmq:3.11.5-management-alpine
-    container_name: 'current-cost_rabbitmq'
-    env_file:
-      - prod.env
-    ports:
-      - 127.0.0.1:5672:5672 #   restrict to host only NOT LAN
-      - 127.0.0.1:15672:15672 # restrict to host only NOT LAN
-    volumes:
-      - ~/.docker-conf/current-cost/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/current-cost/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-      - currentcost-network
-
   postgres:
     image: postgres:15.1-alpine
     container_name: 'current-cost_postgres'
@@ -112,9 +151,15 @@ services:
     env_file:
       - prod.env
     ports:
-      - 127.0.0.1:5432:5432 #   restrict to host only NOT LAN
+      - "5432:5432"
+      #- 127.0.0.1:5432:5432 #   restrict to host only NOT LAN
     networks:
       - currentcost-network
+    depends_on:
+      - currentcostmonitor
 
 networks:
   currentcost-network:
+
+volumes:   
+  seq-logs:

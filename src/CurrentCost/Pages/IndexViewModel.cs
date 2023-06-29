@@ -1,5 +1,6 @@
 using Blazorise.Charts;
 using Blazorise.LoadingIndicator;
+using Serilog;
 
 namespace CurrentCost.Pages;
 
@@ -12,6 +13,14 @@ public class IndexViewModel
     {
         try
         {
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Seq("http://seq:5341")
+                .Enrich.WithAssemblyName()
+                .CreateLogger();
+
+            Log.Logger.Information("Starting CurrentCost Handle");
+
+            Log.Logger.Error("BOOMMMM!!");
             await LoadingIndicator.Show();
 
             // Simulate server call ...

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -32,6 +32,11 @@
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" />
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" />
     <PackageReference Include="RabbitMQ.Client" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Enrichers.AssemblyName" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="Serilog.Sinks.Seq" />
     <PackageReference Include="System.IO.Ports" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" />
   
@@ -42,7 +47,17 @@
   </ItemGroup>
     
   <ItemGroup>
+    <ProjectReference Include="..\CurrentCost.Consumers\CurrentCost.Consumers.csproj" />
     <ProjectReference Include="..\CurrentCost.Messages\CurrentCost.Messages.csproj" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>  
   
 </Project>

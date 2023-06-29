@@ -1,15 +1,8 @@
-using System.Diagnostics;
 using System.IO.Ports;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Xml.Serialization;
 using CurrentCost.Messages.Messages;
-using CurrentCost.Monitor.HostedServices;
 using CurrentCost.Monitor.Infrastructure;
 using CurrentCost.Monitor.Infrastructure.IO.Ports;
-using k8s.KubeConfigModels;
 
 namespace CurrentCost.Monitor.HostedServices;
 
@@ -21,7 +14,7 @@ public abstract class MessageStrategy
 
 public interface IMonitorMessageDeserializer
 {
-    MonitorMessage.Msg? Deserialize(string messageXml);
+    MonitorMessage Deserialize(string messageXml);
 }
 
 public partial class StandardMessageStrategy : MessageStrategy
@@ -45,7 +38,7 @@ public partial class StandardMessageStrategy : MessageStrategy
 
     public override BaseMessage GetMessage()
     {
-        MonitorMessage.Msg? message;
+        MonitorMessage? message;
         try
         {
             message = _monitorMessageDeserializer.Deserialize(Message);
@@ -53,13 +46,13 @@ public partial class StandardMessageStrategy : MessageStrategy
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to deserialize message: {message} into {type}", Message, typeof(MonitorMessage));
-            return new MonitorMessage.UnknownMessage();
+            return new UnknownMessage();
         }
 
         if (message == null)
         {
             _logger.LogError("Failed to deserialize message: {message} into {type}", Message, typeof(MonitorMessage));
-            return new MonitorMessage.UnknownMessage();
+            return new UnknownMessage();
         }
 
         return message;
@@ -73,7 +66,7 @@ public class UnknownMessageStrategy : MessageStrategy
 {
     public override bool IsMatch(string message) => false;
 
-    public override BaseMessage GetMessage() => new MonitorMessage.UnknownMessage();
+    public override BaseMessage GetMessage() => new UnknownMessage();
   
 }
 
@@ -139,12 +132,13 @@ public class DataIngestServiceProcessor : IDataIngestServiceProcessor
                     var messageString = p.ReadLine();
 
                     _currentCostMonitorMetrics.MessagesReceive();
-                    _currentCostMonitorMetrics.RecordTotalWattage(44566);
+             
                     var messageStrategy = _messageStrategyService.GetStrategy(messageString);
                     var message = messageStrategy.GetMessage();
+                    _currentCostMonitorMetrics.RecordTotalWattage(message.GetTotalWatts());
                     if (message.ShouldBeSent)
                     {
-                        Task.Run(async () => await _messageSender.SendMessage(message, _cancellationToken),
+                        Task.Run(async () => await _messageSender.SendMessage((MonitorMessage)message, _cancellationToken),
                             _cancellationToken);
                     }
                 }

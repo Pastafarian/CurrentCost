@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CurrentCost.Monitor.Infrastructure.Deserialization;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;

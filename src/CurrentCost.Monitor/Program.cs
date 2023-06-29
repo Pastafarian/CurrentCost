@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CurrentCost.Messages.Common;
 using CurrentCost.Monitor.HostedServices;
 using CurrentCost.Monitor.Infrastructure;
@@ -9,6 +10,8 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using CurrentCost.Monitor.Infrastructure.Deserialization;
+using Serilog;
+using Serilog.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +67,13 @@ builder.Services.AddOpenTelemetry().WithMetrics(opts => opts
 //        });   
 //    }); 
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Seq("http://seq:5341")
+    .Enrich.WithAssemblyName()
+    .CreateLogger();
+
+Log.Logger.Information("Starting CurrentCost.Monitor");
+builder.Logging.AddSerilog();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddHealthChecksUI(setupSettings: setup =>
@@ -97,7 +107,21 @@ builder.Services.AddHostedService<DataIngestService>();
 
 builder.Logging.Services.AddSingleton<CurrentCostMonitorMetrics>();
 
+builder.Host.UseSerilog((hostContext, services, configuration) => {
+    configuration
+        .ReadFrom.Configuration(hostContext.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .Enrich.WithAssemblyName()
+        .Enrich.WithProperty("Application", "CurrentCost.Monitor")
+        .Enrich.WithProperty("Environment", hostContext.HostingEnvironment.EnvironmentName)
+        .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version)
+        .WriteTo.Seq("http://seq:5341")
+        .WriteTo.Console();
+});
 var app = builder.Build();
+;
+
 app.UseRouting();
 app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
    .UseHealthChecks("/healthz", new HealthCheckOptions
@@ -107,6 +131,10 @@ app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
     });
 app.UseHealthChecksPrometheusExporter("/metrics");
 app.UseEndpoints(config => config.MapHealthChecksUI()); // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks
+
+Log.Logger.Error("BOOM!!!");
+Debug.WriteLine("BOOM!!!");
+
 app.Run();
 
 public partial class Program
