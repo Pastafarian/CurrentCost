@@ -16,11 +16,11 @@ namespace CurrentCost.Messages.Messages
         NotificationType NotificationType { get; }
     }
 
-    public abstract class BaseMessage
+    public interface IMessage
     {
         [XmlIgnore]
-        public abstract bool ShouldBeSent { get; }
+        public bool ShouldBeSent { get; }
 
-        public abstract int GetTotalWatts();
+        public int GetTotalWatts();
     }
 }

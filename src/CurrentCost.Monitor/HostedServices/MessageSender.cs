@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using CurrentCost.Messages.Messages;
 using MassTransit;
 
@@ -6,17 +5,17 @@ namespace CurrentCost.Monitor.HostedServices
 {
     public class MessageSender : IMessageSender
     {
-        //private readonly IBus _bus;
-        //private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IBus _bus;
+        private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<MessageSender> _logger;
 
         public MessageSender(
 
-            //IBus bus, IPublishEndpoint publishEndpoint,
+            IBus bus, IPublishEndpoint publishEndpoint,
             ILogger<MessageSender> logger)
         {
-            //_bus = bus;
-            //_publishEndpoint = publishEndpoint;
+            _bus = bus;
+            _publishEndpoint = publishEndpoint;
             this._logger = logger;
         }
 
@@ -31,13 +30,7 @@ namespace CurrentCost.Monitor.HostedServices
             try
             {
                 _logger.LogInformation("Sending message");
-                //await _publishEndpoint.Publish<INotificationCreated>(new
-                //{
-                //    NotificationDate = DateTime.Now,
-                //    NotificationMessage = "Message",
-                //    NotificationType = NotificationType.Email
-                //}, cancellationToken);
-                //await _bus.Publish(message, cancellationToken);
+                await _bus.Publish(message, cancellationToken);
             }
             catch (Exception e)
             {

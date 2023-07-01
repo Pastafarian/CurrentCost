@@ -22,10 +22,10 @@ namespace CurrentCost.Messages.Messages
     }
 
     [XmlRoot(ElementName = "msg")]
-    public class MonitorMessage : BaseMessage
+    public class MonitorMessage : IMessage
     {
         [XmlIgnore]
-        public override bool ShouldBeSent => true;
+        public bool ShouldBeSent => true;
 
         [XmlElement(ElementName = "src")] public string Src { get; set; }
 
@@ -49,6 +49,6 @@ namespace CurrentCost.Messages.Messages
 
         [XmlElement(ElementName = "ch3")] public Ch3 Ch3 { get; set; }
 
-        public override int GetTotalWatts() => Ch1.Watts + Ch2.Watts + Ch3.Watts;
+        public int GetTotalWatts() => Ch1.Watts + Ch2.Watts + Ch3.Watts;
     }
 }

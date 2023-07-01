@@ -1,14 +1,20 @@
-namespace CurrentCost.Messages.Common
+namespace CurrentCost.Infrastructure
 {
     /// <summary>
     /// Settings file for the EventBus
     /// </summary>
-    public class RabbitMqSettings
+    ///
+    public class RabbitMqSettings : BaseSetting
     {
         /// <summary>
         /// Event Bus Host Address. By default set to "localhost".
         /// </summary>
         public string Host { get; set; } = "localhost";
+
+        /// <summary>
+        /// Event Bus Host Address. By default set to "rabbitmq".
+        /// </summary>
+        public string DockerHost { get; set; } = "rabbitmq";
 
         /// <summary>
         /// Event Bus Port. By default set to 5672.
@@ -29,5 +35,10 @@ namespace CurrentCost.Messages.Common
         /// Event Bus Virtual Host. By default set to "/".
         /// </summary>
         public string VirtualHost { get; set; } = "/";
+
+        public override string GetAddress()
+        {
+            return $"amqp://{(InDocker ? DockerHost : Host)}:{Port}";
+        }
     }
 }

@@ -1,8 +1,8 @@
 namespace CurrentCost.Messages.Messages
 {
-    public class UnknownMessage : BaseMessage
+    public class UnknownMessage : IMessage
     {
-        public override bool ShouldBeSent => false;
-        public override int GetTotalWatts() => 0;
+        public bool ShouldBeSent => false;
+        public int GetTotalWatts() => 0;
     }
 }

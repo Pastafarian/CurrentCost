@@ -19,6 +19,5 @@ namespace CurrentCost.Monitor.Infrastructure
         }
         public void MessagesReceive() => MessagesReceivedCounter.Add(1);
         public void RecordTotalWattage(int wattage) => TotalWattage.Add(wattage);
-        
     }
 }

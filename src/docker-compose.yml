@@ -30,61 +30,53 @@ services:
       retries: 10
   seq:
     image: datalust/seq:latest
-    ports:
-      - '81:80'
-      - '5341:5341'
+    container_name: seq
+    hostname: seq
+    restart: unless-stopped
     environment:
-      ACCEPT_EULA: Y
+        - ACCEPT_EULA=Y
+    ports:
+        - "81:80"
+        - 5341:80 
+    volumes:
+      - seq-logs:/data
     networks:
       - currentcost-network
-  #seq:
-  #  image: datalust/seq:latest
-  #  container_name: seq
-  #  hostname: seq
-  #  restart: unless-stopped
-  #  environment:
-  #      - ACCEPT_EULA=Y
+  #currentcost:
+  #  image: ${DOCKER_REGISTRY-}currentcost
+  #  container_name: 'current-cost'
+  #  build:
+  #    context: .
+  #    dockerfile: CurrentCost/Dockerfile
+  #  env_file:
+  #    - prod.env
   #  ports:
-  #      - "81:80"
-  #      - 5341:80 
-  #  volumes:
-  #  - seq-logs:/data
+  #    - 80:80 # expose to host LAN
+  #  depends_on:
+  #    rabbitmq:
+  #      condition: service_healthy
+  #  networks:
+  #    - currentcost-network
  
-  currentcost:
-    image: ${DOCKER_REGISTRY-}currentcost
-    container_name: 'current-cost'
-    build:
-      context: .
-      dockerfile: CurrentCost/Dockerfile
-    env_file:
-      - prod.env
-    ports:
-      - 80:80 # expose to host LAN
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - currentcost-network
- 
-  currentcostmonitor:
-    image: ${DOCKER_REGISTRY-}current-cost-monitor
-    container_name: 'current-cost-monitor'
-    build:
-      context: .
-      dockerfile: CurrentCost.Monitor/Dockerfile
-    env_file:
-       - prod.env
-    ports:
-    - 82:82 # expose to host LAN
-    - 5342:5342
-    depends_on: #- otel-collector
-      seq:
-         condition: service_started
-      rabbitmq:
-        condition: service_healthy
-    networks:
-      - currentcost-network
-      #otel-collector:
+  #currentcostmonitor:
+  #  image: ${DOCKER_REGISTRY-}current-cost-monitor
+  #  container_name: 'current-cost-monitor'
+  #  build:
+  #    context: .
+  #    dockerfile: CurrentCost.Monitor/Dockerfile
+  #  env_file:
+  #     - prod.env
+  #  ports:
+  #  - 82:82 # expose to host LAN
+  #  - 5342:5342
+  #  depends_on: #- otel-collector
+  #    seq:
+  #       condition: service_started
+  #    rabbitmq:
+  #      condition: service_healthy
+  #  networks:
+  #    - currentcost-network
+   #   otel-collector:
   #  image: otel/opentelemetry-collector:0.73.0
   #  command: ["--config=/etc/otel-collector-config.yaml"]
   #  volumes:
@@ -155,8 +147,8 @@ services:
       #- 127.0.0.1:5432:5432 #   restrict to host only NOT LAN
     networks:
       - currentcost-network
-    depends_on:
-      - currentcostmonitor
+    #depends_on:
+    #  - currentcostmonitor
 
 networks:
   currentcost-network:

@@ -1,21 +1,31 @@
 using System.Diagnostics;
-using System.Text.Json;
 using CurrentCost.Messages.Messages;
 using MassTransit;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace CurrentCost.Consumers
 {
-    public class NotificationCreatedConsumer : IConsumer<INotificationCreated>
+    public class MonitorMessageConsumerDefinition :
+        ConsumerDefinition<MonitorMessageConsumer>
     {
-        public async Task Consume(ConsumeContext<INotificationCreated> context)
+        public MonitorMessageConsumerDefinition()
         {
-            var serializedMessage = JsonSerializer.Serialize(context.Message, new JsonSerializerOptions { });
+            // override the default endpoint name, for whatever reason
+         //   EndpointName = "monitor-messages";
 
-            Console.WriteLine($"NotificationCreated event consumed. Message: {serializedMessage}");
+            // limit the number of messages consumed concurrently
+            // this applies to the consumer only, not the endpoint
+            ConcurrentMessageLimit = 4;
+        }
+
+        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator,
+            IConsumerConfigurator<MonitorMessageConsumer> consumerConfigurator)
+        {
+            //endpointConfigurator.UseMessageRetry(r => r.Interval(5, 1000));
+            //endpointConfigurator.UseInMemoryOutbox();
         }
     }
-
     public class MonitorMessageConsumer : IConsumer<MonitorMessage>
     {
         private readonly ILogger<MonitorMessageConsumer> _logger;
@@ -27,6 +37,7 @@ namespace CurrentCost.Consumers
 
         public Task Consume(ConsumeContext<MonitorMessage> context)
         {
+            Log.Logger.Information("Monitor message received. Total Watts {TotalWatts}", context.Message.GetTotalWatts());
             _logger.LogInformation("Monitor message received");
             Debug.WriteLine(context.Message.GetTotalWatts());
 

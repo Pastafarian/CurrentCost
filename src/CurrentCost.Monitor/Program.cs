@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using CurrentCost.Messages.Common;
 using CurrentCost.Monitor.HostedServices;
 using CurrentCost.Monitor.Infrastructure;
 using CurrentCost.Monitor.Infrastructure.IO.Ports;
@@ -11,8 +9,8 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using CurrentCost.Monitor.Infrastructure.Deserialization;
 using Serilog;
-using Serilog.Data;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
+using System.Diagnostics;
+using CurrentCost.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,13 +66,22 @@ builder.Services.AddOpenTelemetry().WithMetrics(opts => opts
 //        });   
 //    }); 
 
+var seqSettings = builder.Configuration.GetSection(nameof(SeqSettings)).Get<SeqSettings>();
+
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Seq("http://seq:5341")
+    .WriteTo.Seq($"http://{(seqSettings.InDocker ? seqSettings.DockerHost : seqSettings.Host)}:{seqSettings.Port}")
     .Enrich.WithAssemblyName()
     .CreateLogger();
 
+builder.Logging.AddSerilog(Log.Logger);
+
+Serilog.Debugging.SelfLog.Enable(msg =>
+{
+    Debug.WriteLine(msg);
+});
+
 Log.Logger.Information("Starting CurrentCost.Monitor");
-builder.Logging.AddSerilog();
+
 builder.Services.AddHealthChecks();
 
 builder.Services.AddHealthChecksUI(setupSettings: setup =>
@@ -98,17 +105,19 @@ else
 }
 
 builder.Services.AddEventBusService(builder.Configuration);
-builder.Services.AddSingleton<IMessageStrategyService, MessageStrategyService>();
-builder.Services.AddSingleton<MessageStrategy, StandardMessageStrategy>();
-builder.Services.AddSingleton<MessageStrategy, UnknownMessageStrategy>();
-builder.Services.AddSingleton<IMessageSender, MessageSender>();
-builder.Services.AddSingleton<IMonitorMessageDeserializer, MonitorMessageDeserializer>();
-builder.Services.AddSingleton<IDataIngestServiceProcessor, DataIngestServiceProcessor>();
+builder.Services.AddTransient<IMessageStrategyService, MessageStrategyService>();
+builder.Services.AddTransient<MessageStrategy, StandardMessageStrategy>();
+builder.Services.AddTransient<MessageStrategy, UnknownMessageStrategy>();
+builder.Services.AddTransient<IMessageSender, MessageSender>();
+builder.Services.AddTransient<IMonitorMessageDeserializer, MonitorMessageDeserializer>();
+builder.Services.AddTransient<IDataIngestServiceProcessor, DataIngestServiceProcessor>();
 builder.Services.AddHostedService<DataIngestService>();
 
 builder.Logging.Services.AddSingleton<CurrentCostMonitorMetrics>();
 
-builder.Host.UseSerilog((hostContext, services, configuration) => {
+var settings = builder.Configuration.GetSection(nameof(SeqSettings)).Get<SeqSettings>();
+builder.Host.UseSerilog((hostContext, services, configuration) =>
+{
     configuration
         .ReadFrom.Configuration(hostContext.Configuration)
         .ReadFrom.Services(services)
@@ -117,12 +126,14 @@ builder.Host.UseSerilog((hostContext, services, configuration) => {
         .Enrich.WithProperty("Application", "CurrentCost.Monitor")
         .Enrich.WithProperty("Environment", hostContext.HostingEnvironment.EnvironmentName)
         .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version)
-        .WriteTo.Seq("http://seq:5341")
+        .WriteTo.Seq($"http://{(settings.InDocker ? settings.DockerHost : settings.Host )}:{settings.Port}")
         .WriteTo.Console();
 });
+
+
 var app = builder.Build();
 ;
-
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseRouting();
 app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
    .UseHealthChecks("/healthz", new HealthCheckOptions
@@ -132,9 +143,6 @@ app.UseHealthChecks("/health", new HealthCheckOptions { Predicate = _ => true })
     });
 app.UseHealthChecksPrometheusExporter("/metrics");
 app.UseEndpoints(config => config.MapHealthChecksUI()); // https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks
-
-Log.Logger.Error("BOOM!!!");
-Debug.WriteLine("BOOM!!!");
 
 app.Run();
 

@@ -9,7 +9,7 @@ namespace CurrentCost.Monitor.HostedServices;
 public abstract class MessageStrategy
 {
     public abstract bool IsMatch(string message);
-    public abstract BaseMessage GetMessage();
+    public abstract IMessage GetMessage();
 }
 
 public interface IMonitorMessageDeserializer
@@ -36,7 +36,7 @@ public partial class StandardMessageStrategy : MessageStrategy
         return _regex.IsMatch(message);
     }
 
-    public override BaseMessage GetMessage()
+    public override IMessage GetMessage()
     {
         MonitorMessage? message;
         try
@@ -66,7 +66,7 @@ public class UnknownMessageStrategy : MessageStrategy
 {
     public override bool IsMatch(string message) => false;
 
-    public override BaseMessage GetMessage() => new UnknownMessage();
+    public override IMessage GetMessage() => new UnknownMessage();
   
 }
 
