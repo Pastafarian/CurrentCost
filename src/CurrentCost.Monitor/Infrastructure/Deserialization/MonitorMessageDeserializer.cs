@@ -21,17 +21,16 @@ namespace CurrentCost.Monitor.Infrastructure.Deserialization
                 if (serializer.Deserialize(reader) is not MonitorMessage message)
                 {
                     _logger.LogError("Failed to deserialize message: {message} into {type}", messageXml, typeof(MonitorMessage));
-                    return null;
+                    throw new Exception($"Failed to deserialize message: {messageXml} into {typeof(MonitorMessage)}");
                 }
                 
-
                 return message;
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to deserialize message: {message} into {type}", messageXml, typeof(MonitorMessage));
+                throw new Exception($"Failed to deserialize message: {messageXml} into {typeof(MonitorMessage)}");
             }
-            return null;
         }
     }
 }

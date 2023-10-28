@@ -11,14 +11,11 @@ namespace CurrentCost.Infrastructure
     public class ExceptionHandlerMiddleware
     {
         // Enrich is a custom extension method that enriches the Serilog functionality - you may ignore it
-        private static readonly ILogger Logger = Log.ForContext(MethodBase.GetCurrentMethod()?.DeclaringType);
+        private static readonly ILogger Logger = Log.ForContext(MethodBase.GetCurrentMethod()?.DeclaringType ?? typeof(ExceptionHandlerMiddleware));
 
         private readonly RequestDelegate _next;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
+        public ExceptionHandlerMiddleware(RequestDelegate next) => _next = next;
 
         public async Task Invoke(HttpContext context)
         {

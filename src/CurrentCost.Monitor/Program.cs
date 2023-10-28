@@ -1,16 +1,16 @@
+using System.Diagnostics;
+using CurrentCost.Infrastructure;
 using CurrentCost.Monitor.HostedServices;
 using CurrentCost.Monitor.Infrastructure;
+using CurrentCost.Monitor.Infrastructure.Deserialization;
 using CurrentCost.Monitor.Infrastructure.IO.Ports;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using OpenTelemetry.Resources;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
-using CurrentCost.Monitor.Infrastructure.Deserialization;
+using OpenTelemetry.Resources;
 using Serilog;
-using System.Diagnostics;
-using CurrentCost.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,7 +105,7 @@ else
 }
 
 builder.Services.AddEventBusService(builder.Configuration);
-builder.Services.AddTransient<IMessageStrategyService, MessageStrategyService>();
+builder.Services.AddTransient<IMessageStrategyFactory, MessageStrategyFactory>();
 builder.Services.AddTransient<MessageStrategy, StandardMessageStrategy>();
 builder.Services.AddTransient<MessageStrategy, UnknownMessageStrategy>();
 builder.Services.AddTransient<IMessageSender, MessageSender>();
@@ -125,7 +125,7 @@ builder.Host.UseSerilog((hostContext, services, configuration) =>
         .Enrich.WithAssemblyName()
         .Enrich.WithProperty("Application", "CurrentCost.Monitor")
         .Enrich.WithProperty("Environment", hostContext.HostingEnvironment.EnvironmentName)
-        .Enrich.WithProperty("Version", typeof(Program).Assembly.GetName().Version)
+        .Enrich.WithProperty("Version", typeof(CurrentCost.Monitor.Program).Assembly.GetName().Version)
         .WriteTo.Seq($"http://{(settings.InDocker ? settings.DockerHost : settings.Host )}:{settings.Port}")
         .WriteTo.Console();
 });
@@ -146,6 +146,9 @@ app.UseEndpoints(config => config.MapHealthChecksUI()); // https://github.com/Xa
 
 app.Run();
 
-public partial class Program
+namespace CurrentCost.Monitor
 {
+    public partial class Program
+    {
+    }
 }

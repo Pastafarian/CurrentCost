@@ -24,8 +24,6 @@ namespace CurrentCost.Messages.Messages
     [XmlRoot(ElementName = "msg")]
     public class MonitorMessage : IMessage
     {
-        [XmlIgnore]
-        public bool ShouldBeSent => true;
 
         [XmlElement(ElementName = "src")] public string Src { get; set; }
 

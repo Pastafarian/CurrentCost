@@ -1,9 +1,10 @@
+using CurrentCost.Domain;
+
 namespace CurrentCost.Infrastructure
 {
     /// <summary>
     /// Settings file for the EventBus
     /// </summary>
-    ///
     public class RabbitMqSettings : BaseSetting
     {
         /// <summary>

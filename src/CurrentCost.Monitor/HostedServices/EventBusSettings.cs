@@ -3,18 +3,17 @@ using MassTransit;
 
 namespace CurrentCost.Monitor.HostedServices
 {
-
     public static class EventBusServiceExtensions
     {
         public static IServiceCollection AddEventBusService(this IServiceCollection services, IConfiguration configuration)
         {
             // Get the event bus settings from the configuration
-            var settingsSection = configuration.GetSection(nameof(RabbitMqSettings));
             var settings = configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
 
             if (settings == null)
             {
-                throw new NullReferenceException("The Event Bus Settings has not been configured. Please check the settings and update them.");
+                throw new NullReferenceException(
+                    "The Event Bus Settings has not been configured. Please check the settings and update them.");
             }
 
             try
@@ -32,35 +31,20 @@ namespace CurrentCost.Monitor.HostedServices
                             h.Password(settings.Password);
                         });
 
-                            //rabbitConfig.OverrideDefaultBusEndpointQueueName(CurrentCostMessagingConstants.MonitorMessageQueue);
                         rabbitConfig.ConfigureEndpoints(rabbitContext);
                         rabbitConfig.Durable = true;
                     });
                 });
-                //services.AddScoped<MonitorMessageConsumer>();
-                //services.AddScoped<NotificationCreatedConsumer>();
-                //    x.SetKebabCaseEndpointNameFormatter();
-                //    x.AddConsumer(typeof(MonitorMessageConsumer));
-                //    //x.UsingRabbitMq((rabbitContext, rabbitConfig) =>
-                //    //{
-                //    //    rabbitConfig.Host(new Uri($"amqp://{settings.Host}:{settings.Port}"), "/", h =>
-                //    //    {
-                //    //        h.Username(settings.Username);
-                //    //        h.Password(settings.Password);
-                //    //    });
-                //    //    rabbitConfig.ConfigureEndpoints(rabbitContext);
-                //    //    rabbitConfig.Durable = true;
-                //    //});
-                //});
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw new Exception($"amqps://{settings.Host}:{settings.Port}" + settings.Username + " " + settings.Password + " set" + settings.VirtualHost);
+                throw new Exception($"amqps://{settings.Host}:{settings.Port}" + settings.Username + " " +
+                                    settings.Password + " set" + settings.VirtualHost);
             }
-            
-            return services;
-        }
 
+            return services;
+
+        }
     }
 }

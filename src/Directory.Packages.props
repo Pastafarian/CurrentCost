@@ -6,14 +6,16 @@
   <ItemGroup>
     <!--Newly added-->
     <!--Shared / Common-->
-    <PackageVersion Include="Ardalis.GuardClauses" Version="4.0.1" />
+    <PackageVersion Include="Ardalis.GuardClauses" Version="4.1.1" />
     <PackageVersion Include="AspNetCore.HealthChecks.ApplicationStatus" Version="7.0.0-rc2.3" />
     <PackageVersion Include="AspNetCore.HealthChecks.Prometheus.Metrics" Version="7.0.0-rc2.4" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.Client" Version="7.0.0-rc2.7" />
-    <PackageVersion Include="MassTransit" Version="8.0.16" />
+    <PackageVersion Include="MassTransit" Version="8.1.1" />
     <PackageVersion Include="MassTransit.AspNetCore" Version="7.3.1" />
     <PackageVersion Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
-    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.0.16" />
+    <PackageVersion Include="MassTransit.RabbitMQ" Version="8.1.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.12" />
+    <PackageVersion Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="7.0.12" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
@@ -27,25 +29,25 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.5.0-beta.1" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Process" Version="0.5.0-beta.3" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.5.0" />
-    <PackageVersion Include="RabbitMQ.Client" Version="6.5.0" />
+    <PackageVersion Include="RabbitMQ.Client" Version="6.6.0" />
     <PackageVersion Include="Serilog" Version="3.0.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageVersion Include="Serilog.Enrichers.AssemblyName" Version="1.0.9" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="7.0.0" />
-    <PackageVersion Include="Serilog.Sinks.Seq" Version="5.2.2" />
+    <PackageVersion Include="Serilog.Sinks.Seq" Version="5.2.3" />
     <PackageVersion Include="System.IO.Ports" Version="7.0.0" />
-    <PackageVersion Include="FluentValidation" Version="11.4.0" />
-    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.4.0" />
+    <PackageVersion Include="FluentValidation" Version="11.8.0" />
+    <PackageVersion Include="FluentValidation.DependencyInjectionExtensions" Version="11.8.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <!--CurrentCost-->
-    <PackageVersion Include="Blazorise.Charts" Version="1.1.6" />
-    <PackageVersion Include="Blazorise.Bootstrap5" Version="1.1.6" />
-    <PackageVersion Include="Blazorise.Components" Version="1.1.6" />
-    <PackageVersion Include="Blazorise.FluentValidation" Version="1.1.6" />
-    <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.1.6" />
-    <PackageVersion Include="Blazorise.LoadingIndicator" Version="1.1.6" />
-    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageVersion Include="Blazorise.Charts" Version="1.2.4" />
+    <PackageVersion Include="Blazorise.Bootstrap5" Version="1.2.4" />
+    <PackageVersion Include="Blazorise.Components" Version="1.2.4" />
+    <PackageVersion Include="Blazorise.FluentValidation" Version="1.2.4" />
+    <PackageVersion Include="Blazorise.Icons.FontAwesome" Version="1.2.4" />
+    <PackageVersion Include="Blazorise.LoadingIndicator" Version="1.2.4" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
     <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
     <!--CurrentCost.Console-->
     <!--No project specific packages-->
@@ -53,13 +55,20 @@
     <PackageVersion Include="AspNetCore.HealthChecks.UI" Version="7.0.0-rc2.7" />
     <PackageVersion Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="7.0.0-rc2.7" />
     <!--CurrentCost.Test-->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageVersion Include="FluentAssertions" Version="6.9.0" />
-    <PackageVersion Include="Moq" Version="4.18.4" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
+    <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageVersion Include="System.Xml.XmlSerializer" Version="4.3.0" />
-    <PackageVersion Include="xunit" Version="2.4.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
-    <PackageVersion Include="coverlet.collector" Version="3.2.0" />
+    <PackageVersion Include="xunit" Version="2.5.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.0" />
+    <!--Current Cost Domain  -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.12" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+    <PackageVersion Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 </Project>

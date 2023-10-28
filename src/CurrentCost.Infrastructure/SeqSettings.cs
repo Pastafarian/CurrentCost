@@ -1,9 +1,9 @@
+using CurrentCost.Domain;
+
 namespace CurrentCost.Infrastructure;
 
 public class SeqSettings : BaseSetting
 {
-
-    
     /// <summary>
     /// Seq Host Address. By default set to "localhost".
     /// </summary>

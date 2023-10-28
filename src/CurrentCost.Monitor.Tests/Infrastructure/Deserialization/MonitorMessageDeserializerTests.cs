@@ -7,13 +7,11 @@ namespace CurrentCost.Monitor.Tests.Infrastructure.Deserialization
 {
     public class MonitorMessageDeserializerTests
     {
-        private Mock<ILogger<MonitorMessageDeserializer>> _loggerMock;
-
-        private MonitorMessageDeserializer _monitorMessageDeserializer;
+        private readonly MonitorMessageDeserializer _monitorMessageDeserializer;
         public MonitorMessageDeserializerTests()
         {
-            _loggerMock = new Mock<ILogger<MonitorMessageDeserializer>>();
-            _monitorMessageDeserializer = new MonitorMessageDeserializer(_loggerMock.Object);
+            Mock<ILogger<MonitorMessageDeserializer>> loggerMock = new();
+            _monitorMessageDeserializer = new MonitorMessageDeserializer(loggerMock.Object);
         }
 
         [Theory]
@@ -27,11 +25,11 @@ namespace CurrentCost.Monitor.Tests.Infrastructure.Deserialization
             var result = _monitorMessageDeserializer.Deserialize(message);
 
             result.Should().NotBeNull();
-            Assert.Equal("CC128-v0.11", result.Src);
-            Assert.Equal(00224, result.Dsb);
-            Assert.Equal(02926, result.Id);
-            Assert.Equal(0, result.Sensor);
-            Assert.Equal(1, result.Type);
+            result.Src.Should().Be("CC128-v0.11");
+            result.Dsb.Should().Be(00224);
+            result.Id.Should().Be(02926);
+            result.Sensor.Should().Be(0);
+            result.Type.Should().Be(1);
             result.Ch1.Watts.Should().BeInRange(01445, 5000);
             result.Ch2.Watts.Should().BeInRange(01445, 5000);
             result.Ch3.Watts.Should().BeInRange(01445, 5000);

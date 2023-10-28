@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,13 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="MassTransit.AspNetCore" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="Serilog.Enrichers.AssemblyName" />
     <PackageReference Include="Serilog.Sinks.Seq" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CurrentCost.Domain\CurrentCost.Domain.csproj" />
     <ProjectReference Include="..\CurrentCost.Messages\CurrentCost.Messages.csproj" />
   </ItemGroup>
 

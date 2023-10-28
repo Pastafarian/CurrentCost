@@ -52,6 +52,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\CurrentCost.Consumers\CurrentCost.Consumers.csproj" />
+    <ProjectReference Include="..\CurrentCost.Domain\CurrentCost.Domain.csproj" />
     <ProjectReference Include="..\CurrentCost.Infrastructure\CurrentCost.Infrastructure.csproj" />
     <ProjectReference Include="..\CurrentCost.Messages\CurrentCost.Messages.csproj" />
   </ItemGroup>

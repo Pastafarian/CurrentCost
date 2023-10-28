@@ -1,5 +1,3 @@
-using System.Xml.Serialization;
-
 namespace CurrentCost.Messages.Messages
 {
     public enum NotificationType
@@ -18,9 +16,6 @@ namespace CurrentCost.Messages.Messages
 
     public interface IMessage
     {
-        [XmlIgnore]
-        public bool ShouldBeSent { get; }
-
         public int GetTotalWatts();
     }
 }

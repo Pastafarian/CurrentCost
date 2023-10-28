@@ -42,40 +42,40 @@ services:
       - seq-logs:/data
     networks:
       - currentcost-network
-  #currentcost:
-  #  image: ${DOCKER_REGISTRY-}currentcost
-  #  container_name: 'current-cost'
-  #  build:
-  #    context: .
-  #    dockerfile: CurrentCost/Dockerfile
-  #  env_file:
-  #    - prod.env
-  #  ports:
-  #    - 80:80 # expose to host LAN
-  #  depends_on:
-  #    rabbitmq:
-  #      condition: service_healthy
-  #  networks:
-  #    - currentcost-network
+  currentcost:
+    image: ${DOCKER_REGISTRY-}currentcost
+    container_name: 'current-cost'
+    build:
+      context: .
+      dockerfile: CurrentCost/Dockerfile
+    env_file:
+      - prod.env
+    ports:
+      - 80:80 # expose to host LAN
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - currentcost-network
  
-  #currentcostmonitor:
-  #  image: ${DOCKER_REGISTRY-}current-cost-monitor
-  #  container_name: 'current-cost-monitor'
-  #  build:
-  #    context: .
-  #    dockerfile: CurrentCost.Monitor/Dockerfile
-  #  env_file:
-  #     - prod.env
-  #  ports:
-  #  - 82:82 # expose to host LAN
-  #  - 5342:5342
-  #  depends_on: #- otel-collector
-  #    seq:
-  #       condition: service_started
-  #    rabbitmq:
-  #      condition: service_healthy
-  #  networks:
-  #    - currentcost-network
+  currentcostmonitor:
+    image: ${DOCKER_REGISTRY-}current-cost-monitor
+    container_name: 'current-cost-monitor'
+    build:
+      context: .
+      dockerfile: CurrentCost.Monitor/Dockerfile
+    env_file:
+       - prod.env
+    ports:
+    - 82:82 # expose to host LAN
+    - 5342:5342
+    depends_on: #- otel-collector
+      seq:
+         condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - currentcost-network
    #   otel-collector:
   #  image: otel/opentelemetry-collector:0.73.0
   #  command: ["--config=/etc/otel-collector-config.yaml"]
@@ -147,6 +147,8 @@ services:
       #- 127.0.0.1:5432:5432 #   restrict to host only NOT LAN
     networks:
       - currentcost-network
+    volumes:
+       - ./data:/var/lib/postgresql/data
     #depends_on:
     #  - currentcostmonitor
 

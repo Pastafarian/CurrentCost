@@ -1,22 +1,36 @@
-﻿@page "/"
-@inject CurrentCost.Pages.IndexViewModel vm
+@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using CurrentCost.Consumers.SignalR
+@inject IndexViewModel vm
 
 <Row>
-    <Column ColumnSize="ColumnSize.Is12">
+    <Column ColumnSize="ColumnSize.Is6">
         <h1><span><i class="fas fa-bolt"></i></span> Hello, world!</h1>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is3">
+        <p>Group By</p>
+        <Select TValue="IndexViewModel.GroupBy" SelectedValue="@vm.SelectedGroupBy" SelectedValueChanged="@OnGroupByChanged">
+            <SelectItem Value="IndexViewModel.GroupBy.None">None</SelectItem>
+            <SelectItem Value="IndexViewModel.GroupBy.Hour">Hour</SelectItem>
+            <SelectItem Value="IndexViewModel.GroupBy.Day">Day</SelectItem>
+        </Select>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is3">
+        <p>Number of items</p>
+        <Select TValue="int" SelectedValue="@vm.SelectedNumberOfItems" SelectedValueChanged="@OnNumberOfItemsChanged">
+            @foreach (var item in numberOfItems)
+            {
+                <SelectItem Value="@item">@item</SelectItem>
+            }
+        </Select>
     </Column>
 </Row>
 <Row>
-    <Column ColumnSize="ColumnSize.Is4">
-        <Alert Color="Color.Primary" Visible>
-            Is8
-        </Alert>
-    </Column>
-    <Column ColumnSize="ColumnSize.Is8">
+    <Column ColumnSize="ColumnSize.Is12">
         <Alert Color="Color.Secondary" Visible>
 
             <LoadingIndicator @ref="vm.LoadingIndicator">
-                <LineChart @ref="vm.LineChart" TItem="double" />
+                <LineChart @ref="vm.LineChart" TItem="int" />
             </LoadingIndicator>
         </Alert>
     </Column>
@@ -29,11 +43,46 @@
 
 @code 
 {
+    private List<int> numberOfItems = Enumerable.Range(0,40).ToList();
+
+    protected async Task OnNumberOfItemsChanged(int value)
+    {
+        vm.SelectedNumberOfItems = value;
+        await vm.HandleRedraw();
+    }
+    protected async Task OnGroupByChanged(IndexViewModel.GroupBy value)
+    {
+        vm.SelectedGroupBy = value;
+        await vm.HandleRedraw();
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await vm.HandleRedraw();
         }
+    }
+
+    [Inject] NavigationManager? NavigationManager { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if (NavigationManager != null)
+        {
+            var connection = new HubConnectionBuilder()
+                .WithUrl(NavigationManager.ToAbsoluteUri("/signalr-messaging"))
+                .Build();
+
+            connection.On<SignalRMonitorMessage>(nameof(IMonitorMessageReceivedCommand.MessageReceivedAsync), async i => await MonitorMessageReceivedAsync(i));
+
+            await connection.StartAsync();
+        }
+
+        await base.OnInitializedAsync();
+    }
+
+    private async Task MonitorMessageReceivedAsync(SignalRMonitorMessage monitorMessage)
+    {
+        await vm.HandleRedraw();
+        await InvokeAsync(StateHasChanged);
     }
 }

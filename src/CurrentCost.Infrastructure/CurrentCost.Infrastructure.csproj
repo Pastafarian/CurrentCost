@@ -10,7 +10,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Extensions.Logging" />
-    <PackageReference Include="Serilog.Sinks.Seq"  />
+    <PackageReference Include="Serilog.Sinks.Seq" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CurrentCost.Domain\CurrentCost.Domain.csproj" />
   </ItemGroup>
 
 </Project>

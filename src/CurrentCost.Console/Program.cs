@@ -1,5 +1,7 @@
 using System.IO.Ports;
 
+namespace CurrentCost.Console;
+
 public class PortChat
 {
     static bool _continue;
@@ -55,11 +57,11 @@ public class PortChat
         //Console.Write("Name: ");
         //name = Console.ReadLine();
 
-        Console.WriteLine("Type QUIT to exit");
+        System.Console.WriteLine("Type QUIT to exit");
 
         while (_continue)
         {
-            message = Console.ReadLine();
+            message = System.Console.ReadLine();
 
             if (stringComparer.Equals("quit", message))
             {
@@ -83,7 +85,7 @@ public class PortChat
             try
             {
                 var message = _serialPort.ReadLine();
-                Console.WriteLine(message);
+                System.Console.WriteLine(message);
             }
             catch (TimeoutException) { }
         }
@@ -94,14 +96,14 @@ public class PortChat
     {
         string portName;
 
-        Console.WriteLine("Available Ports:");
+        System.Console.WriteLine("Available Ports:");
         foreach (var s in SerialPort.GetPortNames())
         {
-            Console.WriteLine("   {0}", s);
+            System.Console.WriteLine("   {0}", s);
         }
 
-        Console.Write("Enter COM port value (Default: {0}): ", defaultPortName);
-        portName = Console.ReadLine();
+        System.Console.Write("Enter COM port value (Default: {0}): ", defaultPortName);
+        portName = System.Console.ReadLine();
 
         if (portName == "" || !portName.ToLower().StartsWith("com"))
         {
@@ -114,8 +116,8 @@ public class PortChat
     {
         string baudRate;
 
-        Console.Write("Baud Rate(default:{0}): ", defaultPortBaudRate);
-        baudRate = Console.ReadLine();
+        System.Console.Write("Baud Rate(default:{0}): ", defaultPortBaudRate);
+        baudRate = System.Console.ReadLine();
 
         if (baudRate == "")
         {
@@ -128,14 +130,14 @@ public class PortChat
     // Display PortParity values and prompt user to enter a value.
     public static Parity SetPortParity(Parity defaultPortParity)
     {
-        Console.WriteLine("Available Parity options:");
+        System.Console.WriteLine("Available Parity options:");
         foreach (var s in Enum.GetNames(typeof(Parity)))
         {
-            Console.WriteLine("   {0}", s);
+            System.Console.WriteLine("   {0}", s);
         }
 
-        Console.Write("Enter Parity value (Default: {0}):", defaultPortParity.ToString(), true);
-        var parity = Console.ReadLine();
+        System.Console.Write("Enter Parity value (Default: {0}):", defaultPortParity.ToString(), true);
+        var parity = System.Console.ReadLine();
 
         if (parity == "")
         {
@@ -149,8 +151,8 @@ public class PortChat
     {
         string dataBits;
 
-        Console.Write("Enter DataBits value (Default: {0}): ", defaultPortDataBits);
-        dataBits = Console.ReadLine();
+        System.Console.Write("Enter DataBits value (Default: {0}): ", defaultPortDataBits);
+        dataBits = System.Console.ReadLine();
 
         if (dataBits == "")
         {
@@ -165,15 +167,15 @@ public class PortChat
     {
         string stopBits;
 
-        Console.WriteLine("Available StopBits options:");
+        System.Console.WriteLine("Available StopBits options:");
         foreach (var s in Enum.GetNames(typeof(StopBits)))
         {
-            Console.WriteLine("   {0}", s);
+            System.Console.WriteLine("   {0}", s);
         }
 
-        Console.Write("Enter StopBits value (None is not supported and \n" +
-         "raises an ArgumentOutOfRangeException. \n (Default: {0}):", defaultPortStopBits.ToString());
-        stopBits = Console.ReadLine();
+        System.Console.Write("Enter StopBits value (None is not supported and \n" +
+                             "raises an ArgumentOutOfRangeException. \n (Default: {0}):", defaultPortStopBits.ToString());
+        stopBits = System.Console.ReadLine();
 
         if (stopBits == "")
         {
@@ -186,14 +188,14 @@ public class PortChat
     {
         string handshake;
 
-        Console.WriteLine("Available Handshake options:");
+        System.Console.WriteLine("Available Handshake options:");
         foreach (var s in Enum.GetNames(typeof(Handshake)))
         {
-            Console.WriteLine("   {0}", s);
+            System.Console.WriteLine("   {0}", s);
         }
 
-        Console.Write("Enter Handshake value (Default: {0}):", defaultPortHandshake.ToString());
-        handshake = Console.ReadLine();
+        System.Console.Write("Enter Handshake value (Default: {0}):", defaultPortHandshake.ToString());
+        handshake = System.Console.ReadLine();
 
         if (handshake == "")
         {

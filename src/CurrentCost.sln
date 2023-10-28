@@ -19,10 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrentCost.Monitor.Tests",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectFiles", "ProjectFiles", "{0C1B665E-5757-469B-9322-9A472043BDE6}"
 	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{260A14AF-3C1B-4387-ADD5-5A7FF6803B3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurrentCost.Domain", "CurrentCost.Domain\CurrentCost.Domain.csproj", "{A5FE545A-3553-4F5D-806D-3B3FFAE8DCC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +65,10 @@ Global
 		{260A14AF-3C1B-4387-ADD5-5A7FF6803B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{260A14AF-3C1B-4387-ADD5-5A7FF6803B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{260A14AF-3C1B-4387-ADD5-5A7FF6803B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FE545A-3553-4F5D-806D-3B3FFAE8DCC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FE545A-3553-4F5D-806D-3B3FFAE8DCC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FE545A-3553-4F5D-806D-3B3FFAE8DCC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FE545A-3553-4F5D-806D-3B3FFAE8DCC0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

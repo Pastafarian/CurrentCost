@@ -21,5 +21,6 @@
 **/obj
 **/secrets.dev.yaml
 **/values.dev.yaml
+**/.sln
 LICENSE
 README.md

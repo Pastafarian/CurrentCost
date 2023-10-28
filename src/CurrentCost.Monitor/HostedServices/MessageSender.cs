@@ -6,17 +6,14 @@ namespace CurrentCost.Monitor.HostedServices
     public class MessageSender : IMessageSender
     {
         private readonly IBus _bus;
-        private readonly IPublishEndpoint _publishEndpoint;
         private readonly ILogger<MessageSender> _logger;
 
         public MessageSender(
-
-            IBus bus, IPublishEndpoint publishEndpoint,
+            IBus bus,
             ILogger<MessageSender> logger)
         {
             _bus = bus;
-            _publishEndpoint = publishEndpoint;
-            this._logger = logger;
+            _logger = logger;
         }
 
         public async Task<bool> SendMessage(MonitorMessage message, CancellationToken cancellationToken)
@@ -29,7 +26,7 @@ namespace CurrentCost.Monitor.HostedServices
 
             try
             {
-                _logger.LogInformation("Sending message");
+                _logger.LogInformation("Sending message Message.Time: {MessageTime}", message.Time);
                 await _bus.Publish(message, cancellationToken);
             }
             catch (Exception e)
