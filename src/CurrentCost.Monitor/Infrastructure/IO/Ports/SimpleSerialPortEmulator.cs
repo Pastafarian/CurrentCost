@@ -7,7 +7,7 @@ sealed internal class SimpleSerialPortEmulator : ISimpleSerialPort
 {
     private readonly ILogger<SimpleSerialPortEmulator> _logger;
     private readonly System.Timers.Timer _timer;
-    public event SerialDataReceivedEventHandler? DataReceived ;
+    public event SerialDataReceivedEventHandler? DataReceived;
 
     void timer_Elapsed(object? senderx, System.Timers.ElapsedEventArgs ex)
     {
@@ -41,13 +41,6 @@ sealed internal class SimpleSerialPortEmulator : ISimpleSerialPort
     public string ReadLine()
     {
         var dateTime = DateTime.UtcNow;
-        var info = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-        var isDaylightSaving = info.IsDaylightSavingTime(dateTime);
-        if (isDaylightSaving)
-        {
-            dateTime = dateTime.AddHours(1);
-        }
-
         var now = TimeOnly.FromDateTime(dateTime);
         return $"<msg><src>CC128-v0.11</src><dsb>00224</dsb><time>{now.Hour}:{now.Minute}:{now.Second}</time><tmpr>21.5</tmpr><sensor>0</sensor><id>02926</id><type>1</type><ch1><watts>{new Random().Next(01445, 01499)}</watts></ch1><ch2><watts>{new Random().Next(01900, 02900)}</watts></ch2><ch3><watts>{new Random().Next(04000, 04810)}</watts></ch3></msg>";
     }

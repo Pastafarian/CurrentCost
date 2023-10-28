@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Blazorise.Charts;
 using Blazorise.LoadingIndicator;
 using CurrentCost.Domain;
+using CurrentCost.Domain.Entities;
+using CurrentCost.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -63,11 +65,13 @@ public class IndexViewModel
         await LineChart.Clear();
         if (SelectedGroupBy ==  GroupBy.None)
         {
-            var messages = _context.Messages.OrderByDescending(x => x.CreatedTime)
+            var messages = _context.Messages
+                .OrderByDescending(x => x.CreatedTime)
                 .Take(SelectedNumberOfItems)
                 .OrderBy(x => x.CreatedTime);
+
             var labels = messages
-                .Select(x => x.CreatedTime)
+                .Select(x => x.CreatedTime.ToUkDateTime())
                 .ToArray();
             var chartValues = messages.Select(x => x.TotalWatts).ToList();
             await LineChart.AddLabelsDatasetsAndUpdate(labels.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToArray(), GetLineChartDataset(chartValues));
@@ -83,14 +87,14 @@ public class IndexViewModel
                     .GroupBy(x => new { x.CreatedTime.Year, x.CreatedTime.Month, x.CreatedTime.Day, x.CreatedTime.Hour })
                     .Select(x => new
                     {
-                        Date = x.Key.Year + "/" + x.Key.Month + "/" + x.Key.Day + " " + x.Key.Hour + ":00:00",
+                        Date = (x.Key.Year + "/" + x.Key.Month + "/" + x.Key.Day + " " + x.Key.Hour + ":00:00").ConvertToUkDateTime(),
                         TotalWatts = x.Sum(y => y.TotalWatts),
                         DateOrder = x.First().CreatedTime
                     })
                     .OrderByDescending(x => x.DateOrder)
                     .Take(SelectedNumberOfItems)
                     .ToList()
-                    .OrderBy(x => x.Date)
+                    .OrderBy(x => x.DateOrder)
                     .ToList();
 
                 //var query = _context.Messages
@@ -128,7 +132,7 @@ public class IndexViewModel
                 .GroupBy(x => new { x.CreatedTime.Year, x.CreatedTime.Month, x.CreatedTime.Day })
                 .Select(x => new
                 {
-                    Date = x.Key.Year + "/" + x.Key.Month + "/" + x.Key.Day,
+                    Date = (x.Key.Year + "/" + x.Key.Month + "/" + x.Key.Day + " 00:00:00").ConvertToUkDateTime(),
                     TotalWatts = x.Sum(y => y.TotalWatts),
                     DateOrder = x.First().CreatedTime
                 })

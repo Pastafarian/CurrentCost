@@ -26,7 +26,7 @@ namespace CurrentCost.Monitor.HostedServices
 
             try
             {
-                _logger.LogInformation("Sending message Message.Time: {MessageTime}", message.Time);
+                _logger.LogInformation("Sending message Message");
                 await _bus.Publish(message, cancellationToken);
             }
             catch (Exception e)

@@ -31,8 +31,6 @@ namespace CurrentCost.Messages.Messages
 
         [XmlElement(ElementName = "time")] public string TimeString { get; set; }
 
-        public DateTime Time => DateTime.Parse(TimeString);
-
         [XmlElement(ElementName = "tmpr")] public double Tmpr { get; set; }
 
         [XmlElement(ElementName = "sensor")] public int Sensor { get; set; }

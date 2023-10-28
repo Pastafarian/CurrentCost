@@ -33,8 +33,6 @@ namespace CurrentCost.Monitor.Tests.Infrastructure.Deserialization
             result.Ch1.Watts.Should().BeInRange(01445, 5000);
             result.Ch2.Watts.Should().BeInRange(01445, 5000);
             result.Ch3.Watts.Should().BeInRange(01445, 5000);
-            result.Time.Should().BeMoreThan(new TimeSpan(23, 20, 55))
-                .Before(new DateTime(DateTime.Now.Year, 12, DateTime.Now.Day, 23, 22, 1));
             result.Tmpr.Should().BeInRange(21.5, 21.6);
         }
 

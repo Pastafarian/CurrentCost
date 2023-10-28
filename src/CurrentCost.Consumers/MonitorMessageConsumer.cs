@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using CurrentCost.Consumers.SignalR;
 using CurrentCost.Domain;
@@ -45,7 +46,7 @@ namespace CurrentCost.Consumers
                 Ch1Watts = context.Message.Ch1.Watts,
                 Ch2Watts = context.Message.Ch2.Watts,
                 Ch3Watts = context.Message.Ch3.Watts,
-                CreatedTime = context.Message.Time,
+                CreatedTime = DateTime.UtcNow,
                 Dsb = context.Message.Dsb,
                 Sensor = context.Message.Sensor,
                 Src = context.Message.Src,
@@ -71,7 +72,7 @@ namespace CurrentCost.Consumers
                 Ch1Watts = context.Message.Ch1.Watts,
                 Ch2Watts = context.Message.Ch2.Watts,
                 Ch3Watts = context.Message.Ch3.Watts,
-                CreatedTime = DateTime.SpecifyKind(context.Message.Time, DateTimeKind.Utc),
+                CreatedTime = DateTime.UtcNow,
                 Dsb = context.Message.Dsb,
                 Sensor = context.Message.Sensor,
                 Src = context.Message.Src,
@@ -79,6 +80,7 @@ namespace CurrentCost.Consumers
                 TotalWatts = context.Message.GetTotalWatts(),
                 Type = context.Message.Type
             };
+
 
             await _messagingHub.Clients.All.MessageReceivedAsync(command);
         }
